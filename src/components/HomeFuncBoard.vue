@@ -4,12 +4,17 @@ import sprite from "../assets/icon/sprite.svg";
 import { useFuncBroad } from "../stores/funcBoard.js";
 import { useFuncCate } from "../stores/funcCate";
 const funcBoard = useFuncBroad();
-const funcCate = useFuncCate()
+const funcCate = useFuncCate();
 </script>
 
 <template>
   <div id="boardContainer">
-    <div class="funcboard_content" v-for="board in funcBoard.funcBoard" v-show="funcCate.cate==='全部'?true:board.label===funcCate.cate" @click="$router.push('/chat')">
+    <div
+      class="funcboard_content"
+      v-for="board in funcBoard.funcBoard"
+      v-show="funcCate.cate === '全部' ? true : board.label === funcCate.cate"
+      @click="$router.push(`${board.route}`)"
+    >
       <svg class="funcboard_icon">
         <use :href="`${sprite}#icon-${board.icon}`"></use>
       </svg>

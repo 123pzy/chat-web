@@ -1,21 +1,35 @@
-<script lang="ts" setup>
+<script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useChat } from "../stores/chat";
+import { useFuncBroad } from "../stores/funcBoard";
 import InputComponent from "../components/InputComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import Chat from "../components/Chat.vue";
-
 import showdown from "showdown";
 
 let converter = new showdown.Converter();
 // 显示表格
 converter.setOption("tables", true);
-
+const route = useRoute();
 const chat = useChat();
+const funcbroad = useFuncBroad();
+
+
+// 传递system的content到chat.js中：
+console.log(route.params.route);
+const funcBoardList = funcbroad.funcBoard.find((item) => {
+  return item.route == route.params.route;
+});
+const system_message = {
+  role: "system",
+  content: `${funcBoardList.message}`,
+};
+chat.messages.push(system_message);
 
 // 请求参数：
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -33,15 +47,16 @@ var html;
 async function sendQuestion() {
   if (chat.pushed == true && sended.value == false) {
     sended.value = !sended.value;
+
     const res = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       data,
       config
     );
+
     chat.messages.push(res.data.choices[0].message);
-    console.log(res.data.choices[0].message.content);
+    console.log(chat.messages);
     html = converter.makeHtml(res.data.choices[0].message.content);
-    console.log(html);
 
     chat.pushed = !chat.pushed;
     sended.value = !sended.value;

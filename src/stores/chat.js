@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
+import { useFuncBroad } from "./funcBoard";
 
 export const useChat = defineStore("chat", {
   state: () => {
     return {
       say: "",
-      messages: [{ role: "system", content: "和我聊聊天吧！" }],
+      messages: [],
       pushed: false,
-      content:'',
+      content: "",
+      currentFuncBoard:''
     };
   },
   actions: {
