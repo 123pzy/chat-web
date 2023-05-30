@@ -1,11 +1,28 @@
-<script setup></script>
+<script setup>
+import { ArrowDown } from "@element-plus/icons-vue";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { getUsername } from "../api/request";
+
+const token = localStorage.getItem("token");
+// 获取用户名
+const username_res = await getUsername({ token });
+const username = username_res.data.username;
+const router = useRouter();
+// 退出登录
+function logout() {
+  localStorage.removeItem("token");
+  router.go(0);
+}
+const imgUrl = ref(`/api/profile/getimg/${token}`);
+</script>
 
 <template>
   <div class="text_box">
-    <span class="span_1">下载</span>
+    <span class="span_1" @click="$router.push('/')">首页</span>
     <span class="span_2">AI画图</span>
-    <span class="span_3">教程</span>
-    <span class="span_4">购买会员</span>
+    <span class="span_3" @click="$router.push('/gettutorial')">教程</span>
+    <span class="span_4" @click="$router.push('/buyvip')">购买次数</span>
     <svg
       t="1684050229865"
       class="icon_moon"
@@ -44,18 +61,38 @@
       ></path>
     </svg>
     <div class="headImage_box">
-      <img src="../assets/头像.jpg" alt="" class="headImg" />
+      <img
+        :src="`/api/profile/getimg/${token}`"
+        alt=""
+        class="headImg"
+        @click="$router.push('/profile/edit')"
+      />
     </div>
-    <span class="myName">潘潘</span>
+    <el-dropdown>
+      <span class="el-dropdown-link">
+        {{ username }}
+        <el-icon class="el-icon--right">
+          <arrow-down />
+        </el-icon>
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="$router.push('/profile/edit')"
+            >个人中心</el-dropdown-item
+          >
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .text_box {
-  width: 300px;
+  width: auto;
   display: flex;
   align-items: center;
-  flex-basis: 450px;
+  flex-basis: 500px;
   gap: 18px;
   span:nth-child(-n + 4) {
     color: aliceblue;
@@ -66,6 +103,7 @@
     padding-right: 5px;
     padding-top: 2px;
     padding-bottom: 2px;
+    cursor: pointer;
   }
   span:nth-child(1) {
     // 设置0.5px的边框
@@ -101,5 +139,16 @@
     color: white;
     font-size: 14px;
   }
+}
+
+// element-plus下拉框
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+.el-dropdown-link {
+  border: none;
 }
 </style>

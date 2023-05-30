@@ -4,6 +4,7 @@ import LoginPage from "./page/LoginPage.vue";
 import { watch } from "vue";
 import { useChat } from "./stores/chat";
 import { useRoute } from "vue-router";
+
 const route = useRoute();
 const chat = useChat();
 // 如果改变了功能板块，清空messages:
@@ -16,13 +17,13 @@ watch(
 </script>
 
 <template>
-  <template v-if="$route.name !== '/login'">
-    <header class="header">
+  <template v-if="$route.name !== 'login'">
+    <header>
       <NavBar></NavBar>
     </header>
-    <router-view></router-view>
+    <Suspense><router-view></router-view></Suspense>
   </template>
-  <template v-if="$route.path === '/login'">
+  <template v-if="$route.name === 'login'">
     <LoginPage></LoginPage>
   </template>
 </template>

@@ -2,11 +2,7 @@
 import { useChat } from "../stores/chat";
 
 const props = defineProps(["height", "width", "placeholder", "modelValue"]);
-
 const chat = useChat();
-
-// 接收父组件传递过来的事件：
-// const emits = defineEmits(["sendSay"]);
 </script>
 
 <template>
@@ -15,10 +11,7 @@ const chat = useChat();
     class="input"
     :placeholder="props.placeholder"
     v-model="chat.say"
-    @keydown.enter="
-      chat.toSay();
-      // emits('sendSay');
-    "
+    @keydown.enter="chat.toSay()"
   />
 </template>
 

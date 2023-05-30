@@ -1,6 +1,5 @@
 <script setup>
 import sprite from "../assets/icon/sprite.svg";
-// pinia
 import { useFuncBroad } from "../stores/funcBoard.js";
 import { useFuncCate } from "../stores/funcCate";
 const funcBoard = useFuncBroad();

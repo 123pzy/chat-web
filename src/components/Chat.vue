@@ -21,12 +21,14 @@ if (props.role === "user") {
   showFirstSystem = true;
 }
 const styleGitHubCss = ref("markdown-body");
+
+const token = localStorage.getItem('token')
 </script>
 
 <template>
   <div class="chat" v-if="showFirstSystem">
     <div class="answer_container" :style="style_answer">
-      <img src="../assets/头像.jpg" alt="" />
+      <img src="../assets/chatPGT.jpg" alt="" />
       <!-- 这里使用到了v-html，所以必须搭配上v-once使用，不然会导致所有的span的内容同时修改 -->
       <span
         class="answer_content"
@@ -37,7 +39,7 @@ const styleGitHubCss = ref("markdown-body");
     </div>
     <div class="say_container" :style="style_say">
       <span class="say_content"> {{ props.content }} </span>
-      <img src="../assets/头像2.jpg" alt="" />
+      <img :src="`/api/profile/getimg/${token}`" alt="" />
     </div>
   </div>
 </template>
@@ -57,7 +59,7 @@ $contentMarginTop: 25px;
     display: flex;
     align-items: center;
     height: 80%;
-    background-color: #fff;
+    background-color: #dfe4ea;
     // 设置自动换行：
     word-wrap: break-word;
     word-break: break-all;
@@ -74,7 +76,7 @@ $contentMarginTop: 25px;
     border-top: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid #fff;
+    border-left: 10px solid #dfe4ea;
     position: relative;
     // 控制伪元素的位置：
     left: 20px;
@@ -99,7 +101,7 @@ $contentMarginTop: 25px;
   padding-top: $contentMarginTop;
   .answer_content {
     height: 100%;
-    background-color: #fff;
+    background-color: #dfe4ea;
     // padding: 10px;
     // 设置自动换行：
     word-wrap: break-word;
@@ -117,7 +119,7 @@ $contentMarginTop: 25px;
     border-top: 10px solid transparent;
     border-left: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-right: 10px solid #fff;
+    border-right: 10px solid #f1f2f6;
     position: relative;
     // 控制伪元素的位置：
     left: -28px;

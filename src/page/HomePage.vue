@@ -2,14 +2,19 @@
 import HomeButton from "../components/HomeButton.vue";
 import HomeFuncBoard from "../components/HomeFuncBoard.vue";
 import InputComponent from "../components/InputComponent.vue";
+import ProfileEdittingPage from "./ProfileEdittingPage.vue";
 </script>
 
 <template>
-  <div class="inp_box">
-    <InputComponent :height="30" :width="97" placeholder="搜索场景名"></InputComponent>
-  </div>
-  <HomeButton></HomeButton>
-  <HomeFuncBoard></HomeFuncBoard>
+    <div class="inp_box">
+      <InputComponent
+        :height="30"
+        :width="97"
+        placeholder="搜索场景名"
+      ></InputComponent>
+    </div>
+    <HomeButton></HomeButton>
+    <HomeFuncBoard></HomeFuncBoard>
 </template>
 
 <style lang="scss" scoped>

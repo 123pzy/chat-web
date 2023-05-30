@@ -151,7 +151,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "all",
           label: "情感",
           route: "chat_beyourboyfriend",
-          message: "你现在扮演我的男友，要man一点哦",
+          message: "你现在是我的男朋友，跟我对话要像我男朋友一样，不要露馅哦！",
         },
         {
           id: 19,

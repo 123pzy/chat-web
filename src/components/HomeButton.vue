@@ -1,16 +1,22 @@
 <script setup>
 // pinia
-import {useFuncCate} from '../stores/funcCate'
-const funcCate = useFuncCate()
-function getFuncCate(e){
-    funcCate.cate = e.target.textContent
+import { useFuncCate } from "../stores/funcCate";
+const funcCate = useFuncCate();
+function getFuncCate(e) {
+  funcCate.cate = e.target.textContent;
 }
 </script>
 
 <template>
   <div id="button_content">
     <div class="button_container">
-      <div @click="getFuncCate" v-for="cate in funcCate.funcCate" :key="cate.id">{{ cate.label }}</div>
+      <div
+        @click="getFuncCate"
+        v-for="cate in funcCate.funcCate"
+        :key="cate.id"
+      >
+        {{ cate.label }}
+      </div>
     </div>
   </div>
 </template>

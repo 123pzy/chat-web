@@ -9,6 +9,8 @@ export const useLogin = defineStore("login", {
         age: "",
         username: "",
       },
+      isLogin: "",
+      token: localStorage.getItem("token"),
     };
   },
 });

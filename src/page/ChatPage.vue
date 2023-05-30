@@ -7,8 +7,9 @@ import { useFuncBroad } from "../stores/funcBoard";
 import InputComponent from "../components/InputComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import Chat from "../components/Chat.vue";
+import { deleteRemainTimes ,getUsername} from "../api/request";
 import showdown from "showdown";
-
+// 渲染输出的markdown样式
 let converter = new showdown.Converter();
 // 显示表格
 converter.setOption("tables", true);
@@ -16,6 +17,10 @@ const route = useRoute();
 const chat = useChat();
 const funcbroad = useFuncBroad();
 
+// 获取用户名
+const token = localStorage.getItem("token");
+const username_res = await getUsername({ token });
+const username = username_res.data.username;
 
 // 传递system的content到chat.js中：
 console.log(route.params.route);
@@ -29,14 +34,13 @@ const system_message = {
 chat.messages.push(system_message);
 
 // 请求参数：
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const config = {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${OPENAI_API_KEY}`,
   },
 };
-// chat.messages = []
 const data = {
   model: "gpt-3.5-turbo",
   messages: chat.messages,
@@ -48,18 +52,23 @@ async function sendQuestion() {
   if (chat.pushed == true && sended.value == false) {
     sended.value = !sended.value;
 
-    const res = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      data,
-      config
-    );
-
-    chat.messages.push(res.data.choices[0].message);
-    console.log(chat.messages);
-    html = converter.makeHtml(res.data.choices[0].message.content);
-
-    chat.pushed = !chat.pushed;
-    sended.value = !sended.value;
+    // chatGPT免费使用次数减一
+    const remainTimesRes = await deleteRemainTimes(username);
+    if (remainTimesRes.data.remainTimes >= 0) {
+      var res = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        data,
+        config
+      );
+      console.log(remainTimesRes.data.message);
+      chat.messages.push(res.data.choices[0].message);
+      console.log(chat.messages);
+      html = converter.makeHtml(res.data.choices[0].message.content);
+      chat.pushed = !chat.pushed;
+      sended.value = !sended.value;
+    } else {
+      alert(remainTimesRes.data.message);
+    }
   } else {
     if (chat.pushed == false) {
       console.log("不能发送空字符串哦！");
@@ -90,9 +99,9 @@ async function sendQuestion() {
           :height="35"
           :width="60"
           placeholder="请输入你的问题..."
-          @keydown.enter="sendQuestion"
+          @keydown.enter.native="sendQuestion"
         ></InputComponent>
-        <ButtonComponent @click="sendQuestion" />
+        <ButtonComponent @click.native="sendQuestion" />
       </div>
     </div>
   </div>
