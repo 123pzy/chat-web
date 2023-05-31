@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { useLogin } from "../stores/login";
 import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 import { loginAxios, registerAxios } from "../api/request";
 
 // 自定义
@@ -22,30 +23,32 @@ function changeLogin() {
 
 // 登录:
 async function submitLogin() {
-  if (login.ruleForm.username == "" || login.ruleForm.pass == "") {
-    alert("用户名或密码不能为空!");
-  } else {
-    const res = await loginAxios({
-      username: login.ruleForm.username,
-      password: login.ruleForm.pass,
+  const res = await loginAxios({
+    username: login.ruleForm.username,
+    password: login.ruleForm.pass,
+  });
+  if (res.data.code == 1) {
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("username", res.data.username);
+    // element-plus的登录结果提示：
+    ElMessage({
+      showClose: true,
+      message: `${res.data.message}` + ",3秒钟后跳转网站首页",
+      type: "success",
     });
-    if (res.data.code == 1) {
+    setTimeout(() => {
       router.push("/");
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("username", res.data.username);
-      // element-plus的登录结果提示：
-      ElMessage.success({
-        message: `${res.data.message}`,
-        type: "success",
-      });
-    } else {
-      ElMessage.error(`${res.data.message}`);
-    }
+    }, 3000);
+  } else {
+    ElMessage({
+      showClose: true,
+      message: `${res.data.message}`,
+      type: "error",
+    });
   }
 }
 
 const ruleFormRef = ref();
-
 const checkAge = (rule: any, value: any, callback: any) => {
   if (!value) {
     return callback(new Error("Please input the age"));
@@ -98,13 +101,27 @@ const submitForm = (formEl: FormInstance | undefined) => {
       console.log("submit!");
       // 注册:
       if (login.ruleForm.username == "") {
-        alert("用户名不能为空!");
+        ElMessage({
+          showClose: true,
+          message: "用户名不能为空!",
+          type: "error",
+        });
+      } else if (String(login.ruleForm.username).length > 6) {
+        ElMessage({
+          showClose: true,
+          message: "用户名为任意字符，且不能超过6位哦！",
+          type: "error",
+        });
       } else {
         registerAxios({
           username: `${login.ruleForm.username}`,
           password: `${login.ruleForm.pass}`,
         }).then((res) => {
-          alert(res.data.message);
+          ElMessage({
+            showClose: true,
+            message: `${res.data.message}`,
+            type: `${res.data.code == 1 ? "success" : "error"}`,
+          });
           if (res.data.code == 1) {
             already.value = !already.value;
           } else {

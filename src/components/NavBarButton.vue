@@ -14,7 +14,7 @@ function logout() {
   localStorage.removeItem("token");
   router.go(0);
 }
-const imgUrl = ref(`/api/profile/getimg/${token}`);
+const imgUrl = import.meta.env.MODE=== 'development'?` /api/profile/getimg/${token}` : `/profile/getimg/${token}`
 </script>
 
 <template>
@@ -62,7 +62,7 @@ const imgUrl = ref(`/api/profile/getimg/${token}`);
     </svg>
     <div class="headImage_box">
       <img
-        :src="`/api/profile/getimg/${token}`"
+        :src="imgUrl"
         alt=""
         class="headImg"
         @click="$router.push('/profile/edit')"

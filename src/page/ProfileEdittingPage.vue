@@ -2,11 +2,10 @@
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { getRemainTimes, getUsername, updateUsername } from "../api/request";
 
 const router = useRouter();
-const imageUrl = ref("");
 const token = localStorage.getItem("token");
 // 上传图片成功后执行
 const handleAvatarSuccess = () => {
@@ -15,8 +14,8 @@ const handleAvatarSuccess = () => {
 // 上传图片之前执行
 const beforeAvatarUpload = (rawFile) => {
   if (rawFile.type === "image/jpeg" || rawFile.type === "image/png") {
-    if (rawFile.size / 1024 / 1024 > 3) {
-      alert("头像大小不能超过3MB!");
+    if (rawFile.size / 1024 / 1024 > 2) {
+      alert("头像大小不能超过2MB!");
       return false;
     } else {
       return true;
@@ -42,7 +41,10 @@ const username = username_res.data.username;
 // 修改用户名
 async function changeUsername() {
   if (input_content.value === null) {
-    alert("请输入您要修改的用户名！");
+    ElMessage({
+      showClose: true,
+      message: "请输入您要修改的用户名！",
+    });
   } else {
     const res = await updateUsername({
       token,
@@ -52,6 +54,8 @@ async function changeUsername() {
     router.go(0);
   }
 }
+const imgUrl = import.meta.env.MODE=== 'development'?` /api/profile/getimg/${token}` : `/profile/getimg/${token}`
+const imgUrl2 = import.meta.env.MODE === 'development' ? '/api/profile/' + `${token}` : '/profile/' + `${token}`
 </script>
 
 <template>
@@ -61,12 +65,12 @@ async function changeUsername() {
       <span>用户头像：</span>
       <el-upload
         class="avatar-uploader"
-        :action="`/api/profile/${token}`"
+        :action="imgUrl2"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
       >
-        <img v-if="true" :src="`/api/profile/getimg/${token}`" class="avatar" />
+        <img v-if="true" :src="imgUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"
           ><Plus
         /></el-icon> </el-upload

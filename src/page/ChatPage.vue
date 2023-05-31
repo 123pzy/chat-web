@@ -7,7 +7,8 @@ import { useFuncBroad } from "../stores/funcBoard";
 import InputComponent from "../components/InputComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import Chat from "../components/Chat.vue";
-import { deleteRemainTimes ,getUsername} from "../api/request";
+import { ElMessage } from "element-plus";
+import { deleteRemainTimes, getUsername } from "../api/request";
 import showdown from "showdown";
 // 渲染输出的markdown样式
 let converter = new showdown.Converter();
@@ -34,7 +35,7 @@ const system_message = {
 chat.messages.push(system_message);
 
 // 请求参数：
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -67,7 +68,11 @@ async function sendQuestion() {
       chat.pushed = !chat.pushed;
       sended.value = !sended.value;
     } else {
-      alert(remainTimesRes.data.message);
+      ElMessage({
+        showClose: true,
+        message: `${remainTimesRes.data.message}`,
+        type: "error",
+      });
     }
   } else {
     if (chat.pushed == false) {

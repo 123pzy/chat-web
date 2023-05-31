@@ -23,6 +23,9 @@ if (props.role === "user") {
 const styleGitHubCss = ref("markdown-body");
 
 const token = localStorage.getItem('token')
+const imgUrl = 'import.meta.env.MODE'=== 'development'?` /api/profile/getimg/${token}` : `/profile/getimg/${token}`
+console.log(imgUrl);
+
 </script>
 
 <template>
@@ -39,7 +42,7 @@ const token = localStorage.getItem('token')
     </div>
     <div class="say_container" :style="style_say">
       <span class="say_content"> {{ props.content }} </span>
-      <img :src="`/api/profile/getimg/${token}`" alt="" />
+      <img :src="imgUrl" alt="" />
     </div>
   </div>
 </template>

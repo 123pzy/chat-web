@@ -38,7 +38,7 @@ export const getRemainTimes = (params) => {
 // 获取用户名
 export const getUsername = (params) => {
   return instance({
-    url: "/api/profile/getusername",
+    url: path + "/profile/getusername",
     params,
   });
 };
@@ -47,7 +47,16 @@ export const getUsername = (params) => {
 export const updateUsername = (data) => {
   return instance({
     method: "PUT",
-    url: "/api/profile/changeusername",
+    url: path + "/profile/changeusername",
+    data,
+  });
+};
+
+// 导航守卫
+export const judgmentIsLogin = (data) => {
+  return instance({
+    method: "POST",
+    url: path + "/login/islogin",
     data,
   });
 };
