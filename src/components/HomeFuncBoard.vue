@@ -1,12 +1,18 @@
 <script setup>
 import sprite from "../assets/icon/sprite.svg";
+import sprite2 from "../assets/icon/sprite2.svg";
 import { useFuncBroad } from "../stores/funcBoard.js";
 import { useFuncCate } from "../stores/funcCate";
 import { ElMessage } from "element-plus";
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
 
+const style = useStyle();
+const { fontColor } = storeToRefs(style);
 const funcBoard = useFuncBroad();
 const funcCate = useFuncCate();
 const funcBoard_list = funcBoard.funcBoard;
+
 function addFuncBoard() {
   const func = prompt(
     "请输入你要chatGPT扮演一个什么样的角色，比如你想让它做你的英语老师，检查你的英文是否包含语法错误，你就可以说，你现在是我的英文老师，检查我发给你的每段英文中是否包含语法错误。描述的越详细越好~"
@@ -29,6 +35,10 @@ function showWarning() {
       "温馨提示，本网站暂时只支持科学上网才能访问chatGPT，未来将实现所有用户都可访问！",
   });
 }
+// icon的填充色fill
+// const fillColor = ref({
+//   none: true,
+// });
 </script>
 
 <template>
@@ -43,7 +53,10 @@ function showWarning() {
       "
     >
       <svg class="funcboard_icon">
-        <use :href="`${sprite}#icon-${board.icon}`"></use>
+        <use
+          :href="`${fontColor == '#f5f5f5' ? sprite : sprite2}#icon-${board.icon}`"
+          fill="none"
+        ></use>
       </svg>
       <div class="funcboard_text">{{ board.func }}</div>
     </div>
@@ -55,6 +68,7 @@ function showWarning() {
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
 #boardContainer {
   // grid布局
   display: grid;
@@ -65,7 +79,7 @@ function showWarning() {
   margin-right: 30px;
   > div {
     height: 140px;
-    box-shadow: 0 0 0 0.1px #fff;
+    box-shadow: 0 0 0 0.1px $font-color;
     display: flex;
     flex-wrap: wrap;
     div {
@@ -81,7 +95,7 @@ function showWarning() {
     justify-content: center;
     align-items: center;
     flex-basis: 180px;
-    color: #fff;
+    color: $font-color;
   }
 }
 .funcboard_icon {

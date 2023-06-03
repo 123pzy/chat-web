@@ -1,7 +1,13 @@
 <script setup>
 // pinia
 import { useFuncCate } from "../stores/funcCate";
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
+
 const funcCate = useFuncCate();
+const style = useStyle();
+// pinia响应式
+const { fontColor, homeBtnBgColor, homeBtnHover, bgColor } = storeToRefs(style);
 function getFuncCate(e) {
   funcCate.cate = e.target.textContent;
 }
@@ -22,11 +28,15 @@ function getFuncCate(e) {
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
+$home-btn-bgcolor: v-bind(homeBtnBgColor);
+$home-btn-hover: v-bind(homeBtnHover);
+$bgColor: v-bind(bgColor);
 // 设置最外边的容器
 #button_content {
   height: 40px;
   width: 100vw;
-  background-color: #18181c;
+  background-color: $bgColor;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +48,7 @@ function getFuncCate(e) {
   align-items: center;
   height: 40px;
   flex-basis: 97vw;
-  background-color: #303033;
+  background-color: $home-btn-bgcolor;
   gap: 1px;
   padding-left: 4px;
   padding-right: 4px;
@@ -49,13 +59,13 @@ function getFuncCate(e) {
     display: flex; /*为了设置每个div里的文字居中 */
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: $font-color;
     font-size: 14px;
     height: 32px;
     border-radius: 3px;
   }
   div:hover {
-    background-color: #454548;
+    background-color: $home-btn-hover;
   }
 }
 </style>

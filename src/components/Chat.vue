@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import "/node_modules/github-markdown-css/github-markdown-light.css";
+
 const props = defineProps(["role", "content", "html"]);
 var style_say;
 var style_answer;
@@ -43,7 +44,7 @@ const imgUrl =
     </div>
     <div class="say_container" :style="style_say">
       <span class="say_content"> {{ props.content }} </span>
-      <img :src="imgUrl" alt="" />
+      <img :src="imgUrl" alt="" @click="$router.push('/profile/edit')" style="cursor: pointer;"/>
     </div>
   </div>
 </template>

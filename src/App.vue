@@ -1,7 +1,14 @@
 <script setup>
-import { watch, defineAsyncComponent } from "vue";
+import { ref, watch, defineAsyncComponent } from "vue";
 import { useChat } from "./stores/chat";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useStyle } from "./stores/style";
+
+const style = useStyle();
+const { bgColor } = storeToRefs(style);
+console.log(bgColor.value);
+
 const NavBar = defineAsyncComponent(() => import("./components/NavBar.vue"));
 const LoginPage = defineAsyncComponent(() => import("./page/LoginPage.vue"));
 
@@ -17,7 +24,8 @@ watch(
 </script>
 
 <template>
-  <template v-if="$route.name !== 'login'">
+  <div class="app">
+    <template v-if="$route.name !== 'login'">
     <header>
       <Suspense><NavBar></NavBar></Suspense>
     </header>
@@ -26,6 +34,14 @@ watch(
   <template v-if="$route.name === 'login'">
     <Suspense><LoginPage></LoginPage></Suspense>
   </template>
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="scss">
+$bgcolor:v-bind(bgColor);
+.app {
+  height: 100%;
+  width: 100%;
+  background-color: $bgcolor;
+}
+</style>

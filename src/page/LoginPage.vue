@@ -5,6 +5,12 @@ import { useLogin } from "../stores/login";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { loginAxios, registerAxios } from "../api/request";
+import { useStyle } from '../stores/style';
+import {storeToRefs} from 'pinia'
+
+// 字体颜色
+const styleStore = useStyle()
+const {fontColor} = storeToRefs(styleStore)
 
 // 自定义
 const login = useLogin();
@@ -189,7 +195,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
     </div>
 
     <!-- 登录 -->
-    <div class="login_container" v-if="!already">
+    <div class="login_container" v-else>
       <el-form
         ref="ruleFormRef"
         :model="login.ruleForm"
@@ -228,6 +234,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   </div>
 </template>
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
 .container {
   display: flex;
   justify-content: center;
@@ -243,19 +250,19 @@ const resetForm = (formEl: FormInstance | undefined) => {
   .title {
     position: absolute;
     top: 8vh;
-    color: #fff;
+    color: $font-color;
     font-size: 2.8em;
   }
   // 登录注册框
   .register_container,
   .login_container {
-    border: 2px solid #fff;
+    border: 2px solid $font-color;
     height: 300px;
     width: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    background-color: $font-color;
     border-radius: 8%;
     margin-right: 1vw;
     .submit_box {

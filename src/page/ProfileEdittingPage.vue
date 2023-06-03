@@ -4,7 +4,15 @@ import { ElMessage } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { getRemainTimes, getUsername, updateUsername } from "../api/request";
+import { useStyle } from '../stores/style';
+import {storeToRefs} from 'pinia'
 
+const style = useStyle()
+const {fontColor} = storeToRefs(style)
+
+// loading..效果
+let loading = ref(null);
+// 路由
 const router = useRouter();
 const token = localStorage.getItem("token");
 // 上传图片成功后执行
@@ -69,7 +77,14 @@ const imgUrl2 =
 </script>
 
 <template>
-  <div class="profileInfo">
+  <el-table
+    v-loading="true"
+    style="width: 100%; height: 91vh"
+    element-loading-background="#18181c"
+    v-if="loading"
+  >
+  </el-table>
+  <div class="profileInfo" v-else>
     <div class="profileInfo_content">
       <div class="title">编辑用户资料</div>
       <span>用户头像：</span>
@@ -102,6 +117,7 @@ const imgUrl2 =
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
 .avatar-uploader .avatar {
   width: 178px;
   height: 178px;
@@ -155,7 +171,7 @@ const imgUrl2 =
   width: 40%;
   min-width: 290px;
   background-color: #bdc3c7;
-  border-radius: 6%;
+  border-radius: 20px;
   padding: 20px;
   font-size: 1em;
 }
@@ -165,7 +181,7 @@ const imgUrl2 =
 }
 .input {
   width: 25vw;
-  background-color: #fff;
+  background-color: $font-color;
   margin: 20px;
 }
 .changeNameBtn {

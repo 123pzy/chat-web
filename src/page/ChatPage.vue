@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBroad } from "../stores/funcBoard";
@@ -10,6 +10,11 @@ import Chat from "../components/Chat.vue";
 import { ElMessage } from "element-plus";
 import { deleteRemainTimes, getUsername } from "../api/request";
 import showdown from "showdown";
+import { useStyle } from '../stores/style';
+import {storeToRefs} from 'pinia'
+
+const style = useStyle()
+const {fontColor} = storeToRefs(style)
 
 // 渲染输出的markdown样式
 let converter = new showdown.Converter();
@@ -41,7 +46,7 @@ const system_message = {
 chat.messages.push(system_message);
 
 // 请求参数：
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -115,6 +120,7 @@ async function sendQuestion() {
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
 .chat_container {
   display: flex;
   height: 91vh;
@@ -122,11 +128,11 @@ async function sendQuestion() {
   box-sizing: border-box;
 
   .chat_history {
-    border-right: 2px solid #fff;
+    border-right: 2px solid $font-color;
   }
   .chat_history {
     flex: 1;
-    // border: 2px solid #fff;
+    // border: 2px solid $font-color;
   }
   .chat_content {
     flex: 4;

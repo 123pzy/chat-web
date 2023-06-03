@@ -1,4 +1,10 @@
-<script setup></script>
+<script setup>
+import { useStyle } from '../stores/style';
+import {storeToRefs} from 'pinia'
+
+const style = useStyle()
+const {fontColor} = storeToRefs(style)
+</script>
 
 <template>
   <div class="container">
@@ -11,6 +17,8 @@
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
+
 .container {
   display: flex;
   justify-content: center;
@@ -36,7 +44,7 @@
   }
 }
 .text {
-  color: #fff;
+  color: $font-color;
   text-align: center;
   font-size: 1.5em;
   margin-bottom: 10vh;

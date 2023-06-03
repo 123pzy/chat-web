@@ -1,6 +1,10 @@
 <script setup>
 import { useChat } from "../stores/chat";
+import { useStyle } from "../stores/style";
+import {storeToRefs} from 'pinia'
 
+const style = useStyle()
+const {inputBgColor, inputFocus} =  storeToRefs(style)
 const props = defineProps(["height", "width", "placeholder", "modelValue"]);
 const chat = useChat();
 </script>
@@ -19,12 +23,11 @@ const chat = useChat();
 .input {
   height: v-bind(height + "px");
   width: v-bind(width + "vw");
-  border: 0px;
   color: #fff; /*设置输入的文字的颜色 */
   caret-color: #4ca488; /* 设置光标的颜色 */
   text-indent: 10px; /* 设置光标距离左边框的长度 */
-  background-color: #303033;
-  border: 1px solid #303033;
+  background-color: v-bind(inputBgColor);
+  border: 1px solid v-bind(inputBgColor);
   box-sizing: border-box; /* 设置padding不撑大总体大小 */
   border-radius: 2px;
   z-index: 10;
@@ -43,6 +46,6 @@ const chat = useChat();
   border: 1.5px solid #4ca488;
 }
 .input:focus {
-  background-color: #202d2c;
+  background-color: v-bind(inputFocus);
 }
 </style>
