@@ -10,6 +10,7 @@ import Chat from "../components/Chat.vue";
 import { ElMessage } from "element-plus";
 import { deleteRemainTimes, getUsername } from "../api/request";
 import showdown from "showdown";
+
 // 渲染输出的markdown样式
 let converter = new showdown.Converter();
 // 显示表格
@@ -24,18 +25,23 @@ const username_res = await getUsername({ token });
 const username = username_res.data.username;
 
 // 传递system的content到chat.js中：
-console.log(route.params.route);
 const funcBoardList = funcbroad.funcBoard.find((item) => {
   return item.route == route.params.route;
 });
+// 判断是不是在自定义功能板块刷新了页面，是的话执行：
+let newMessage;
+if (funcBoardList == undefined) {
+  const func = prompt("请重新输入场景！");
+  newMessage = func;
+}
 const system_message = {
   role: "system",
-  content: `${funcBoardList.message}`,
+  content: `${funcBoardList != undefined ? funcBoardList.message : newMessage}`,
 };
 chat.messages.push(system_message);
 
 // 请求参数：
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -61,9 +67,7 @@ async function sendQuestion() {
         data,
         config
       );
-      console.log(remainTimesRes.data.message);
       chat.messages.push(res.data.choices[0].message);
-      console.log(chat.messages);
       html = converter.makeHtml(res.data.choices[0].message.content);
       chat.pushed = !chat.pushed;
       sended.value = !sended.value;
@@ -76,9 +80,7 @@ async function sendQuestion() {
     }
   } else {
     if (chat.pushed == false) {
-      console.log("不能发送空字符串哦！");
     } else if (sended.value == true) {
-      console.log("正在发送，请耐心等待！");
     }
   }
 }

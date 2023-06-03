@@ -7,7 +7,7 @@ import NavBarButton from "../components/NavBarButton.vue";
     <div class="icon_box">
       <!-- logo图 -->
       <img src="../assets/icon/logo.svg" alt="" class="icon_cat"/>
-      <h2 style="color: white">智障喵</h2>
+      <h2 class="title">智慧喵</h2>
     </div>
     <Suspense><NavBarButton></NavBarButton></Suspense>
   </div>
@@ -27,12 +27,19 @@ import NavBarButton from "../components/NavBarButton.vue";
 .icon_box {
   display: flex;
   align-items: center;
-  flex-basis: 140px;
-  justify-content: space-between;
-  padding-left: 20px;
+  flex-basis: 23vw;
+  justify-content: flex-start;
+  padding-left: 1vw;
+  .title{
+    color: #fff;
+    font-size: 1.7vw;
+    margin-left: 1vw;
+  }
 }
 .icon_cat {
-  height: 60px;
-  width: 60px;
+  height: 5vw;
+  width: 5vw;
+  min-width: 40px;
+  min-height: 40px;
 }
 </style>

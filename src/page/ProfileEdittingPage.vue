@@ -51,11 +51,21 @@ async function changeUsername() {
       newUsername: input_content.value,
     });
     alert(res.data.message);
-    router.go(0);
+    if (res.data.code == 1) {
+      router.go(0);
+    } else {
+      input_content.value = "";
+    }
   }
 }
-const imgUrl = import.meta.env.MODE=== 'development'?` /api/profile/getimg/${token}` : `/profile/getimg/${token}`
-const imgUrl2 = import.meta.env.MODE === 'development' ? '/api/profile/' + `${token}` : '/profile/' + `${token}`
+const imgUrl =
+  import.meta.env.MODE === "development"
+    ? ` /api/profile/getimg/${token}`
+    : `/profile/getimg/${token}`;
+const imgUrl2 =
+  import.meta.env.MODE === "development"
+    ? "/api/profile/" + `${token}`
+    : "/profile/" + `${token}`;
 </script>
 
 <template>
@@ -83,7 +93,9 @@ const imgUrl2 = import.meta.env.MODE === 'development' ? '/api/profile/' + `${to
         clearable
         class="input"
       ></el-input>
-      <el-button type="primary" @click="changeUsername">修改用户名</el-button>
+      <el-button type="primary" @click="changeUsername" class="changeNameBtn"
+        >修改用户名</el-button
+      >
       <div>剩余使用次数：{{ remainTimes }}</div>
     </div>
   </div>
@@ -139,12 +151,13 @@ const imgUrl2 = import.meta.env.MODE === 'development' ? '/api/profile/' + `${to
   }
 }
 .profileInfo_content {
-  height: 85vh;
+  height: 80vh;
   width: 40%;
+  min-width: 290px;
   background-color: #bdc3c7;
   border-radius: 6%;
   padding: 20px;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 .avatar-uploader {
   margin: 30px;
@@ -154,5 +167,10 @@ const imgUrl2 = import.meta.env.MODE === 'development' ? '/api/profile/' + `${to
   width: 25vw;
   background-color: #fff;
   margin: 20px;
+}
+.changeNameBtn {
+  font-size: 0.6em;
+  width: 20vw;
+  max-width: 100px;
 }
 </style>

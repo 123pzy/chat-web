@@ -92,11 +92,15 @@ const imgUrl = import.meta.env.MODE=== 'development'?` /api/profile/getimg/${tok
   width: auto;
   display: flex;
   align-items: center;
-  flex-basis: 500px;
+  justify-content: flex-end;
+  flex-basis: 65vw;
+  float: right;
+  flex-wrap: wrap;
   gap: 18px;
+  margin-right: 10px;
   span:nth-child(-n + 4) {
     color: aliceblue;
-    font-size: 14px;
+    font-size: 0.85em;
     height: 20px;
     box-shadow: 0 0 0 0.5px #4ca488;
     padding-left: 5px;
@@ -134,6 +138,7 @@ const imgUrl = import.meta.env.MODE=== 'development'?` /api/profile/getimg/${tok
     height: 100%;
     width: auto;
     border-radius: 50%;
+    cursor: pointer;
   }
   .myName {
     color: white;

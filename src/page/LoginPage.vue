@@ -33,12 +33,12 @@ async function submitLogin() {
     // element-plus的登录结果提示：
     ElMessage({
       showClose: true,
-      message: `${res.data.message}` + ",3秒钟后跳转网站首页",
+      message: `${res.data.message}` + ",即将跳转网站首页",
       type: "success",
     });
     setTimeout(() => {
       router.push("/");
-    }, 3000);
+    }, 2000);
   } else {
     ElMessage({
       showClose: true,
@@ -98,7 +98,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log("submit!");
       // 注册:
       if (login.ruleForm.username == "") {
         ElMessage({
@@ -130,7 +129,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
         });
       }
     } else {
-      console.log("error submit!");
       return false;
     }
   });
@@ -145,15 +143,17 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <!-- 注册 -->
-  <div class="login_register">
+  <div class="container">
+    <h1 class="title">chatGPT聊天网站</h1>
+    <img src="../assets/icon/登陆注册页图片.svg" alt="" />
+    <!-- 注册 -->
     <div class="register_container" v-if="already">
       <el-form
         ref="ruleFormRef"
         :model="login.ruleForm"
         status-icon
         :rules="rules"
-        label-width="120px"
+        label-width="auto"
         class="demo-ruleForm"
       >
         <el-form-item label="用户名" prop="name">
@@ -174,16 +174,15 @@ const resetForm = (formEl: FormInstance | undefined) => {
             @keyup.enter.native="submitForm(ruleFormRef)"
           />
         </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            :class="style"
-            >提交</el-button
-          >
-          <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-        </el-form-item>
-        <span class="login_text" @click="changeLogin"
+        <div class="submit_box">
+          <el-form-item>
+            <el-button type="primary" @click="submitForm(ruleFormRef)"
+              >提交</el-button
+            >
+            <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+          </el-form-item>
+        </div>
+        <span class="register_text" @click="changeLogin"
           >已有账号?点我直接登录</span
         >
       </el-form>
@@ -196,7 +195,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
         :model="login.ruleForm"
         status-icon
         :rules="rules"
-        label-width="120px"
+        label-width="auto"
         class="demo-ruleForm"
       >
         <el-form-item label="用户名" prop="name">
@@ -210,54 +209,71 @@ const resetForm = (formEl: FormInstance | undefined) => {
             @keyup.enter.native="submitLogin"
           />
         </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="submitLogin()"
-            :plain="true"
-            :class="style"
-            :disabled="!Boolean(login.ruleForm.username && login.ruleForm.pass)"
-            >登录</el-button
-          >
-        </el-form-item>
+        <div class="login_box">
+          <el-form-item>
+            <el-button
+              type="primary"
+              @click="submitLogin()"
+              :plain="true"
+              :disabled="
+                !Boolean(login.ruleForm.username && login.ruleForm.pass)
+              "
+              >登录</el-button
+            >
+          </el-form-item>
+        </div>
         <span class="login_text" @click="changeLogin">还没有账号?点我注册</span>
       </el-form>
     </div>
   </div>
 </template>
-<style scoped>
-.login_register {
-  height: 100%;
-  width: 100%;
-  background-color: #18181c;
+<style lang="scss" scoped>
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.login_container,
-.register_container {
-  display: flex;
-  /* justify-content: center; */
-  /* flex-wrap: wrap; */
-  align-items: center;
-  height: 400px;
-  width: 30vw;
-  background-color: #fff;
-  border-radius: 5%;
-}
-.demo-ruleForm {
-  width: 25vw;
-  min-width: 400px;
-}
-.login_text {
-  display: block;
+  flex-wrap: wrap;
+  height: 100%;
   width: 100%;
-  padding-left: 50px;
-  text-align: center;
-}
-.center {
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  img {
+    height: 50vh;
+    width: 50vw;
+    // padding-right: 5vw;
+  }
+  .title {
+    position: absolute;
+    top: 8vh;
+    color: #fff;
+    font-size: 2.8em;
+  }
+  // 登录注册框
+  .register_container,
+  .login_container {
+    border: 2px solid #fff;
+    height: 300px;
+    width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8%;
+    margin-right: 1vw;
+    .submit_box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login_box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .register_text,
+    .login_text {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 </style>

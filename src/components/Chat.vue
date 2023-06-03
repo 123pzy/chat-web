@@ -22,10 +22,11 @@ if (props.role === "user") {
 }
 const styleGitHubCss = ref("markdown-body");
 
-const token = localStorage.getItem('token')
-const imgUrl = 'import.meta.env.MODE'=== 'development'?` /api/profile/getimg/${token}` : `/profile/getimg/${token}`
-console.log(imgUrl);
-
+const token = localStorage.getItem("token");
+const imgUrl =
+  import.meta.env.MODE === "development"
+    ? ` /api/profile/getimg/${token}`
+    : `/profile/getimg/${token}`;
 </script>
 
 <template>
@@ -122,7 +123,7 @@ $contentMarginTop: 25px;
     border-top: 10px solid transparent;
     border-left: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-right: 10px solid #f1f2f6;
+    border-right: 10px solid #dfe4ea;
     position: relative;
     // 控制伪元素的位置：
     left: -28px;

@@ -97,7 +97,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 12,
           func: "论文降重",
-          icon: "all",
+          icon: "paper-weight-reduce",
           label: "写作",
           route: "chat_paper-weight-reduction",
           message: "你现在是一个教授，把我给你的每段文字降重",
@@ -113,7 +113,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 14,
           func: "中译英",
-          icon: "all",
+          icon: "chinese-to-english",
           label: "翻译",
           route: "chat_chinesetoenglish",
           message:
@@ -122,7 +122,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 15,
           func: "英译中",
-          icon: "all",
+          icon: "english-to-chinese",
           label: "翻译",
           route: "chat_englishtochinese",
           message:
@@ -140,7 +140,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 17,
           func: "模拟女友",
-          icon: "all",
+          icon: "be-your-grilfriend",
           label: "情感",
           route: "chat_beyourgrilfriend",
           message: "你现在来扮演我的女友，要对我可爱一点哦",
@@ -148,7 +148,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 18,
           func: "模拟男友",
-          icon: "all",
+          icon: "be-your-grilfriend",
           label: "情感",
           route: "chat_beyourboyfriend",
           message: "你现在是我的男朋友，跟我对话要像我男朋友一样，不要露馅哦！",
@@ -156,7 +156,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 19,
           func: "SQL优化",
-          icon: "all",
+          icon: "sql-to-good",
           label: "编程",
           route: "chat_sql-optimization",
           message: "你现在是一个资深后端程序员，把我给你的每个SQL语句优化一下",
@@ -164,7 +164,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 20,
           func: "辩论家",
-          icon: "all",
+          icon: "be-a-debater",
           label: "教育",
           route: "chat_debate",
           message: "你现在是一个辩论家，把我跟你的对话当成一场辩论赛！",
@@ -180,7 +180,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 22,
           func: "讲故事",
-          icon: "all",
+          icon: "have-a-story",
           label: "故事",
           route: "chat_make-story",
           message: "根据我说的话，编一个童话故事给我听",
@@ -188,7 +188,7 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 23,
           func: "产品经理",
-          icon: "all",
+          icon: "product-manager",
           label: "企业",
           route: "chat_product-manager",
           message: "你现在是一个高级产品经理！",
@@ -196,11 +196,29 @@ export const useFuncBroad = defineStore("funcBoard", {
         {
           id: 24,
           func: "教你表白",
-          icon: "all",
+          icon: "be-your-grilfriend",
           label: "情感",
           route: "chat_say-love",
           message:
             "我喜欢上了一个人，根据我所说的我们两个之间的关系，帮我给他/她写一份200字左右的情书，谢谢！",
+        },
+        {
+          id: 25,
+          func: "Debug",
+          icon: "all",
+          label: "编程",
+          route: "chat_debug",
+          message:
+            "你现在是一个高级程序员的角色，帮我查看我发给你的代码中是不是有bug，有bug的话告诉我怎么改，谢谢！",
+        },
+        {
+          id: 26,
+          func: "智能标注代码注释",
+          icon: "all",
+          label: "编程",
+          route: "chat_code-comment",
+          message:
+            "你现在是一个高级程序员的角色，把我发给你的代码整理成markdown的格式，并把每行都标注上代码注释，谢谢！",
         },
       ],
     };
