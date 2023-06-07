@@ -10,6 +10,7 @@ export const useStyle = defineStore("style", {
       homeBtnBgColor: "#303033",
       homeBtnHover: "#454548",
       theme: "blackTheme",
+      showNum: 0
     };
   },
   actions: {

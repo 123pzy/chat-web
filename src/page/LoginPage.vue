@@ -5,12 +5,13 @@ import { useLogin } from "../stores/login";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { loginAxios, registerAxios } from "../api/request";
-import { useStyle } from '../stores/style';
-import {storeToRefs} from 'pinia'
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
+import { User, Lock } from "@element-plus/icons-vue";
 
 // 字体颜色
-const styleStore = useStyle()
-const {fontColor} = storeToRefs(styleStore)
+const styleStore = useStyle();
+const { fontColor } = storeToRefs(styleStore);
 
 // 自定义
 const login = useLogin();
@@ -163,13 +164,21 @@ const resetForm = (formEl: FormInstance | undefined) => {
         class="demo-ruleForm"
       >
         <el-form-item label="用户名" prop="name">
-          <el-input v-model="login.ruleForm.username" />
+          <el-input
+            v-model="login.ruleForm.username"
+            maxlength="6"
+            :prefix-icon="User"
+            placeholder="输入用户名"
+          />
         </el-form-item>
         <el-form-item label="密码" prop="pass">
           <el-input
             v-model="login.ruleForm.pass"
             type="password"
+            maxlength="20"
             autocomplete="off"
+            :prefix-icon="Lock"
+            placeholder="输入密码"
           />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
@@ -177,12 +186,23 @@ const resetForm = (formEl: FormInstance | undefined) => {
             v-model="login.ruleForm.checkPass"
             type="password"
             autocomplete="off"
+            :prefix-icon="Lock"
+            placeholder="确认密码"
             @keyup.enter.native="submitForm(ruleFormRef)"
           />
         </el-form-item>
         <div class="submit_box">
           <el-form-item>
-            <el-button type="primary" @click="submitForm(ruleFormRef)"
+            <el-button
+              type="primary"
+              @click="submitForm(ruleFormRef)"
+              :disabled="
+                !Boolean(
+                  login.ruleForm.username &&
+                    login.ruleForm.pass &&
+                    login.ruleForm.checkPass
+                )
+              "
               >提交</el-button
             >
             <el-button @click="resetForm(ruleFormRef)">重置</el-button>
@@ -205,13 +225,21 @@ const resetForm = (formEl: FormInstance | undefined) => {
         class="demo-ruleForm"
       >
         <el-form-item label="用户名" prop="name">
-          <el-input v-model="login.ruleForm.username" />
+          <el-input
+            v-model="login.ruleForm.username"
+            maxlength="6"
+            :prefix-icon="User"
+            placeholder="输入用户名"
+          />
         </el-form-item>
         <el-form-item label="密码" prop="pass">
           <el-input
             v-model="login.ruleForm.pass"
             type="password"
             autocomplete="off"
+            maxlength="20"
+            :prefix-icon="Lock"
+            placeholder="输入密码"
             @keyup.enter.native="submitLogin"
           />
         </el-form-item>
@@ -221,6 +249,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
               type="primary"
               @click="submitLogin()"
               :plain="true"
+              size="large"
               :disabled="
                 !Boolean(login.ruleForm.username && login.ruleForm.pass)
               "
@@ -257,8 +286,8 @@ $font-color: v-bind(fontColor);
   .register_container,
   .login_container {
     border: 2px solid $font-color;
-    height: 300px;
-    width: 350px;
+    height: 320px;
+    width: 360px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -281,6 +310,21 @@ $font-color: v-bind(fontColor);
       width: 100%;
       text-align: center;
     }
+  }
+}
+
+// 解决element-plus输入框的闪烁变长问题
+:deep(.el-input__wrapper) {
+  position: relative;
+
+  .el-input__inner {
+    padding-right: 18px;
+  }
+  .el-input__suffix {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 </style>

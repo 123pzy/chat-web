@@ -1,29 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useChat } from "../stores/chat";
 import "/node_modules/github-markdown-css/github-markdown-light.css";
+import showdown from "showdown";
 
-const props = defineProps(["role", "content", "html"]);
-var style_say;
-var style_answer;
-var showFirstSystem = true; // 这个变量控制第一次的system不显示在聊天框中
-
-// 要优化下边的代码：
-if (props.role === "user") {
-  style_answer = ref({
-    display: "none",
-  });
-} else if (props.role === "assistant") {
-  style_say = ref({
-    display: "none",
-  });
-} else if (props.role === "system") {
-  showFirstSystem = false;
-} else if (props.role != "system") {
-  showFirstSystem = true;
-}
+// 渲染输出的markdown样式
+let converter = new showdown.Converter();
+// 显示表格
+converter.setOption("tables", true);
+const chat = useChat();
+// css样式
 const styleGitHubCss = ref("markdown-body");
-
 const token = localStorage.getItem("token");
+// 用户头像链接
 const imgUrl =
   import.meta.env.MODE === "development"
     ? ` /api/profile/getimg/${token}`
@@ -31,20 +20,27 @@ const imgUrl =
 </script>
 
 <template>
-  <div class="chat" v-if="showFirstSystem">
-    <div class="answer_container" :style="style_answer">
+  <div
+    class="chat_container"
+    v-for="(msg, index) in chat.messages"
+    :key="index"
+  >
+    <div class="answer_container" v-if="msg.role == 'assistant'">
       <img src="../assets/chatPGT.jpg" alt="" />
-      <!-- 这里使用到了v-html，所以必须搭配上v-once使用，不然会导致所有的span的内容同时修改 -->
       <span
         class="answer_content"
-        v-html="props.html"
+        v-html="converter.makeHtml(msg.content.replace('undefined', ''))"
         :class="styleGitHubCss"
-        v-once
       ></span>
     </div>
-    <div class="say_container" :style="style_say">
-      <span class="say_content"> {{ props.content }} </span>
-      <img :src="imgUrl" alt="" @click="$router.push('/profile/edit')" style="cursor: pointer;"/>
+    <div class="say_container" v-if="msg.role == 'user'">
+      <span class="say_content"> {{ msg.content }} </span>
+      <img
+        :src="imgUrl"
+        alt=""
+        @click="$router.push('/profile/edit')"
+        style="cursor: pointer"
+      />
     </div>
   </div>
 </template>

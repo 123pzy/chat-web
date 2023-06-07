@@ -1,5 +1,4 @@
 <script setup>
-import axios from "axios";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useChat } from "../stores/chat";
@@ -8,27 +7,24 @@ import InputComponent from "../components/InputComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import Chat from "../components/Chat.vue";
 import { ElMessage } from "element-plus";
-import { deleteRemainTimes, getUsername } from "../api/request";
-import showdown from "showdown";
-import { useStyle } from '../stores/style';
-import {storeToRefs} from 'pinia'
+import {
+  deleteRemainTimes,
+  getUsername,
+  chatEventSource,
+} from "../api/request";
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
 
-const style = useStyle()
-const {fontColor} = storeToRefs(style)
-
-// 渲染输出的markdown样式
-let converter = new showdown.Converter();
-// 显示表格
-converter.setOption("tables", true);
+const style = useStyle();
+const { fontColor } = storeToRefs(style);
+// pinia
 const route = useRoute();
 const chat = useChat();
 const funcbroad = useFuncBroad();
-
 // 获取用户名
 const token = localStorage.getItem("token");
 const username_res = await getUsername({ token });
 const username = username_res.data.username;
-
 // 传递system的content到chat.js中：
 const funcBoardList = funcbroad.funcBoard.find((item) => {
   return item.route == route.params.route;
@@ -44,38 +40,44 @@ const system_message = {
   content: `${funcBoardList != undefined ? funcBoardList.message : newMessage}`,
 };
 chat.messages.push(system_message);
-
-// 请求参数：
-const OPENAI_API_KEY = "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";
-const config = {
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${OPENAI_API_KEY}`,
-  },
-};
-const data = {
-  model: "gpt-3.5-turbo",
-  messages: chat.messages,
-  temperature: 0.7,
-};
 const sended = ref(false); // 控制不能在上一次sendQuestion的请求没结束时就发送第二次请求
-var html;
+// 定义html
+var chatRefs = storeToRefs(chat);
 async function sendQuestion() {
+  chatRefs.htmlBefore.value = "";
   if (chat.pushed == true && sended.value == false) {
     sended.value = !sended.value;
-
     // chatGPT免费使用次数减一
     const remainTimesRes = await deleteRemainTimes(username);
+    // 判断是否还有使用次数
     if (remainTimesRes.data.remainTimes >= 0) {
-      var res = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        data,
-        config
-      );
-      chat.messages.push(res.data.choices[0].message);
-      html = converter.makeHtml(res.data.choices[0].message.content);
-      chat.pushed = !chat.pushed;
-      sended.value = !sended.value;
+      // 发送SSE请求,重点！
+      const eventSource = chatEventSource(chat.messages);
+      chat.messages.push({
+        role: "assistant",
+        content: "",
+      });
+      new Promise((resolve) => {
+        eventSource.onmessage = (event) => {
+          if (!event.data.includes("我是一个bug,你来修复我吧！")) {
+            chatRefs.htmlBefore.value += event.data;
+            chat.messages[chat.messages.length - 1].content =
+              chatRefs.htmlBefore.value;
+          } else {
+            eventSource.close();
+            console.log("流式数据传输结束！");
+            resolve(chatRefs.htmlBefore.value);
+          }
+        };
+        eventSource.onerror = (error) => {
+          console.error("流式传输发生错误：", error);
+        };
+      }).then((res) => {
+        console.log("res:", res);
+
+        chat.pushed = !chat.pushed;
+        sended.value = !sended.value;
+      });
     } else {
       ElMessage({
         showClose: true,
@@ -98,13 +100,7 @@ async function sendQuestion() {
     </aside>
     <div class="chat_content">
       <div class="chat_context">
-        <Chat
-          v-for="(message, index) in chat.messages"
-          :role="message.role"
-          :content="message.content"
-          :key="index"
-          :html="html"
-        ></Chat>
+        <Chat></Chat>
       </div>
       <div class="chat_question_box">
         <InputComponent
@@ -120,7 +116,6 @@ async function sendQuestion() {
 </template>
 
 <style lang="scss" scoped>
-$font-color: v-bind(fontColor);
 .chat_container {
   display: flex;
   height: 91vh;
@@ -128,11 +123,8 @@ $font-color: v-bind(fontColor);
   box-sizing: border-box;
 
   .chat_history {
-    border-right: 2px solid $font-color;
-  }
-  .chat_history {
     flex: 1;
-    // border: 2px solid $font-color;
+    border-right: 2px solid v-bind(fontColor);
   }
   .chat_content {
     flex: 4;

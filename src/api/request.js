@@ -1,4 +1,6 @@
 import instance from "./index.js";
+import { baseURL } from "./config";
+
 const path = import.meta.env.MODE == "development" ? "/api" : "";
 
 // 登录请求
@@ -60,3 +62,17 @@ export const judgmentIsLogin = (data) => {
     data,
   });
 };
+
+// chat
+// export const chatGPT = (data) => {
+//   return instance({
+//     method: "POST",
+//     url: path + "/chat",
+//     data,
+//   })
+// }
+export const chatEventSource = (message) => {
+  return new EventSource(
+    baseURL.pro + `/chat?chatContentArray=${JSON.stringify(message)}`
+  );
+}

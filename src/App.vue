@@ -7,8 +7,7 @@ import { useStyle } from "./stores/style";
 
 const style = useStyle();
 const { bgColor } = storeToRefs(style);
-console.log(bgColor.value);
-
+console.log('%c国内站点请访问：http://www.dapanna.cn:3000','color:red;font-size:16px;background:yellow;')
 const NavBar = defineAsyncComponent(() => import("./components/NavBar.vue"));
 const LoginPage = defineAsyncComponent(() => import("./page/LoginPage.vue"));
 

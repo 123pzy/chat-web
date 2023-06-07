@@ -1,9 +1,9 @@
 <script setup>
-import { useStyle } from '../stores/style';
-import {storeToRefs} from 'pinia'
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
 
-const style = useStyle()
-const {fontColor} = storeToRefs(style)
+const style = useStyle();
+const { fontColor, bgColor } = storeToRefs(style);
 </script>
 
 <template>
@@ -12,13 +12,15 @@ const {fontColor} = storeToRefs(style)
       <img src="../assets/weixin.jpg" alt="" />
       <hr />
     </div>
-    <span class="text">扫码加微信，0.08元购买一次chatGPT使用机会</span>
+    <span class="text"
+      >由于项目都是使用本人的个人chatGPT账号调用的API接口，每个用户只匹配了5次免费调用chatGPT的机会。扫二维码加我微信，我给你增加次数~</span
+    >
   </div>
 </template>
 
 <style lang="scss" scoped>
 $font-color: v-bind(fontColor);
-
+$bgColor: v-bind(bgColor);
 .container {
   display: flex;
   justify-content: center;
@@ -26,13 +28,13 @@ $font-color: v-bind(fontColor);
   flex-wrap: wrap;
   height: 91vh;
   width: 100%;
-  background-color: #18181c;
+  background-color: $bgColor;
 }
 .qrcode {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #18181c;
+  background-color: $bgColor;
   margin-top: 10vh;
   img {
     height: 100%;
@@ -44,9 +46,12 @@ $font-color: v-bind(fontColor);
   }
 }
 .text {
+  display: inline-block;
+  width: 50vw;
+  min-width: 300px;
   color: $font-color;
-  text-align: center;
-  font-size: 1.5em;
+  font-size: 1.3em;
   margin-bottom: 10vh;
+  text-indent: 2em; // 首行缩进
 }
 </style>

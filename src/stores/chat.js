@@ -8,7 +8,9 @@ export const useChat = defineStore("chat", {
       messages: [],
       pushed: false,
       content: "",
-      currentFuncBoard:''
+      htmlBefore:'',
+      test:'',
+      currentFuncBoard:'',
     };
   },
   actions: {

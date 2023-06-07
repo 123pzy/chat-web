@@ -25,11 +25,10 @@ instance.interceptors.response.use(
     if (error.code == 404) {
       console.log("找不到页面");
     } else {
-      console.log("其他错误");
+      console.log("其他错误！");
     }
   }
 );
 
-console.log(baseurl);
 
 export default instance;

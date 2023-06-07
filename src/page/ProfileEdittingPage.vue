@@ -4,11 +4,11 @@ import { ElMessage } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { getRemainTimes, getUsername, updateUsername } from "../api/request";
-import { useStyle } from '../stores/style';
-import {storeToRefs} from 'pinia'
+import { useStyle } from "../stores/style";
+import { storeToRefs } from "pinia";
 
-const style = useStyle()
-const {fontColor} = storeToRefs(style)
+const style = useStyle();
+const { fontColor } = storeToRefs(style);
 
 // loading..效果
 let loading = ref(null);
@@ -52,6 +52,11 @@ async function changeUsername() {
     ElMessage({
       showClose: true,
       message: "请输入您要修改的用户名！",
+    });
+  } else if (input_content.value.length > 6) {
+    ElMessage({
+      showClose: true,
+      message: "用户名长度不能超过6个字符哦~",
     });
   } else {
     const res = await updateUsername({

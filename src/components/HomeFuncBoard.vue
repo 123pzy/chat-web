@@ -8,7 +8,7 @@ import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
 
 const style = useStyle();
-const { fontColor } = storeToRefs(style);
+const { fontColor, theme } = storeToRefs(style);
 const funcBoard = useFuncBroad();
 const funcCate = useFuncCate();
 const funcBoard_list = funcBoard.funcBoard;
@@ -28,17 +28,6 @@ function addFuncBoard() {
     });
   }
 }
-// 需要科学上网提醒
-function showWarning() {
-  ElMessage({
-    message:
-      "温馨提示，本网站暂时只支持科学上网才能访问chatGPT，未来将实现所有用户都可访问！",
-  });
-}
-// icon的填充色fill
-// const fillColor = ref({
-//   none: true,
-// });
 </script>
 
 <template>
@@ -47,21 +36,26 @@ function showWarning() {
       class="funcboard_content"
       v-for="board in funcBoard.funcBoard"
       v-show="funcCate.cate === '全部' ? true : board.label === funcCate.cate"
-      @click="
-        $router.push(`${board.route}`);
-        showWarning();
-      "
+      @click="$router.push(`${board.route}`)"
     >
       <svg class="funcboard_icon">
         <use
-          :href="`${fontColor == '#f5f5f5' ? sprite : sprite2}#icon-${board.icon}`"
+          :href="`${fontColor == '#f5f5f5' ? sprite : sprite2}#icon-${
+            board.icon
+          }`"
           fill="none"
         ></use>
       </svg>
       <div class="funcboard_text">{{ board.func }}</div>
     </div>
     <div @click="addFuncBoard">
-      <img src="../assets/icon/plus.svg" alt="" class="addButton" />
+      <img
+        src="../assets/icon/plus.svg"
+        alt=""
+        class="addButton"
+        v-if="theme == 'blackTheme'"
+      />
+      <img src="../assets/icon/plus2.svg" alt="" class="addButton" v-else />
       <div>增加自定义功能</div>
     </div>
   </div>
