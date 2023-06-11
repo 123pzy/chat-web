@@ -72,7 +72,8 @@ export const judgmentIsLogin = (data) => {
 //   })
 // }
 export const chatEventSource = (message) => {
+  console.log('chat了一次');
   return new EventSource(
-    baseURL.pro + `/chat?chatContentArray=${JSON.stringify(message)}`
+    `http://45.32.91.22:5001/chat?chatContentArray=${JSON.stringify(message)}`
   );
 }

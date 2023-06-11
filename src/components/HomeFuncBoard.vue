@@ -33,7 +33,6 @@ function addFuncBoard() {
 <template>
   <div id="boardContainer">
     <div
-      class="funcboard_content"
       v-for="board in funcBoard.funcBoard"
       v-show="funcCate.cate === '全部' ? true : board.label === funcCate.cate"
       @click="$router.push(`${board.route}`)"
@@ -46,7 +45,7 @@ function addFuncBoard() {
           fill="none"
         ></use>
       </svg>
-      <div class="funcboard_text">{{ board.func }}</div>
+      <div>{{ board.func }}</div>
     </div>
     <div @click="addFuncBoard">
       <img
@@ -76,6 +75,7 @@ $font-color: v-bind(fontColor);
     box-shadow: 0 0 0 0.1px $font-color;
     display: flex;
     flex-wrap: wrap;
+    cursor: pointer;
     div {
       font-size: 22px;
       padding-bottom: 10px;

@@ -12,18 +12,6 @@ const funcCate = useFuncCate();
 const chat = useChat();
 const style = useStyle();
 const { showNum } = storeToRefs(style);
-// 控制消息弹出框只显示两次
-if (showNum.value <= 1) {
-  ElNotification({
-    title: "温馨提示",
-    message:
-      '这个网站是国外站点，访问速度可能比较慢。国内站点为：<a href="http://www.dapanna.cn:3000">http://www.dapanna.cn:3000</a>',
-    dangerouslyUseHTMLString: true,
-    duration: 6500,
-    position: "bottom-right",
-  });
-  showNum.value++;
-}
 </script>
 
 <template>

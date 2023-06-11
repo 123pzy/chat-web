@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBroad } from "../stores/funcBoard";
@@ -14,7 +14,12 @@ import {
 } from "../api/request";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
+import showdown from "showdown";
 
+// 渲染输出的markdown样式
+let converter = new showdown.Converter();
+// 显示表格
+converter.setOption("tables", true);
 const style = useStyle();
 const { fontColor } = storeToRefs(style);
 // pinia
@@ -23,8 +28,10 @@ const chat = useChat();
 const funcbroad = useFuncBroad();
 // 获取用户名
 const token = localStorage.getItem("token");
-const username_res = await getUsername({ token });
-const username = username_res.data.username;
+if (!!token) {
+  var username_res = await getUsername({ token });
+  var username = username_res.data.username;
+}
 // 传递system的content到chat.js中：
 const funcBoardList = funcbroad.funcBoard.find((item) => {
   return item.route == route.params.route;
@@ -44,7 +51,7 @@ const sended = ref(false); // 控制不能在上一次sendQuestion的请求没�
 // 定义html
 var chatRefs = storeToRefs(chat);
 async function sendQuestion() {
-  chatRefs.htmlBefore.value = "";
+  chat.htmlBefore = "";
   if (chat.pushed == true && sended.value == false) {
     sended.value = !sended.value;
     // chatGPT免费使用次数减一
@@ -57,27 +64,21 @@ async function sendQuestion() {
         role: "assistant",
         content: "",
       });
-      new Promise((resolve) => {
-        eventSource.onmessage = (event) => {
-          if (!event.data.includes("我是一个bug,你来修复我吧！")) {
-            chatRefs.htmlBefore.value += event.data;
-            chat.messages[chat.messages.length - 1].content =
-              chatRefs.htmlBefore.value;
-          } else {
-            eventSource.close();
-            console.log("流式数据传输结束！");
-            resolve(chatRefs.htmlBefore.value);
-          }
-        };
-        eventSource.onerror = (error) => {
-          console.error("流式传输发生错误：", error);
-        };
-      }).then((res) => {
-        console.log("res:", res);
-
-        chat.pushed = !chat.pushed;
-        sended.value = !sended.value;
-      });
+      eventSource.onmessage = (event) => {
+        if (!event.data.includes("[DONE]")) {
+          chat.htmlBefore += event.data;
+          chat.messages[chat.messages.length - 1].content = converter.makeHtml(
+            chat.htmlBefore
+          );
+        } else if (event.data.includes("[DONE]")) {
+          eventSource.close();
+        }
+      };
+      eventSource.onerror = (error) => {
+        console.error("流式传输发生错误：", error);
+      };
+      chat.pushed = !chat.pushed;
+      sended.value = !sended.value;
     } else {
       ElMessage({
         showClose: true,
@@ -91,6 +92,7 @@ async function sendQuestion() {
     }
   }
 }
+const chatContext = ref(null);
 </script>
 
 <template>
@@ -99,8 +101,8 @@ async function sendQuestion() {
       <div class="chat_every_history"></div>
     </aside>
     <div class="chat_content">
-      <div class="chat_context">
-        <Chat></Chat>
+      <div class="chat_context" ref="chatContext">
+        <Suspense><Chat :chatContext="chatContext"></Chat></Suspense>
       </div>
       <div class="chat_question_box">
         <InputComponent

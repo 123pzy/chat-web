@@ -48,18 +48,32 @@ const router = createRouter({
 
 // 全局导航守卫
 router.beforeEach(async (to, from) => {
-  const token = localStorage.getItem("token");
-  // 判断用户是否有token或者token是否过期
-  const res = await judgmentIsLogin({ token });
-  if (to.path != "/login") {
-    if (!res.data.islogin) {
-      ElMessage({
-        showClose: true,
-        message: `${res.data.message}`,
-      });
-      return "/login";
+  const token = localStorage.getItem("token")
+  const username = localStorage.getItem("username")
+  const data = {
+    username,
+    token
+  }
+  if (token == null && username == null) {
+    ElMessage({
+      showClose: true,
+      message: '没有您的登录信息，请登陆后使用！',
+    });
+  }
+  else {
+    // 判断用户是否有token或者token是否过期
+    const res = await judgmentIsLogin({ data });
+    if (to.path != "/login") {
+      if (!res.data.islogin) {
+        ElMessage({
+          showClose: true,
+          message: `${res.data.message}`,
+        });
+        return "/login";
+      }
     }
   }
+
 });
 
 export { router };

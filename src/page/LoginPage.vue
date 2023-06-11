@@ -106,13 +106,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       // 注册:
-      if (login.ruleForm.username == "") {
+      if (login.ruleForm.username.trim() == "") {
         ElMessage({
           showClose: true,
           message: "用户名不能为空!",
           type: "error",
         });
-      } else if (String(login.ruleForm.username).length > 6) {
+      } else if (String(login.ruleForm.username.trim()).length > 6) {
         ElMessage({
           showClose: true,
           message: "用户名为任意字符，且不能超过6位哦！",
@@ -120,8 +120,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
         });
       } else {
         registerAxios({
-          username: `${login.ruleForm.username}`,
-          password: `${login.ruleForm.pass}`,
+          username: `${login.ruleForm.username.trim()}`,
+          password: `${login.ruleForm.pass.trim()}`,
         }).then((res) => {
           ElMessage({
             showClose: true,

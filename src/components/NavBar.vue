@@ -17,7 +17,7 @@ const {bgColor,fontColor} = storeToRefs(style)
         class="icon_cat"
         @click="$router.push('/')"
       />
-      <h2 class="title" @click="$router.push('/')">智慧喵</h2>
+      <h2 class="title" @click="$router.push('/')">Chat万花筒</h2>
     </div>
     <Suspense><NavBarButton></NavBarButton></Suspense>
   </div>

@@ -1,13 +1,8 @@
 <script setup>
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { useChat } from "../stores/chat";
 import "/node_modules/github-markdown-css/github-markdown-light.css";
-import showdown from "showdown";
 
-// 渲染输出的markdown样式
-let converter = new showdown.Converter();
-// 显示表格
-converter.setOption("tables", true);
 const chat = useChat();
 // css样式
 const styleGitHubCss = ref("markdown-body");
@@ -17,6 +12,28 @@ const imgUrl =
   import.meta.env.MODE === "development"
     ? ` /api/profile/getimg/${token}`
     : `/profile/getimg/${token}`;
+
+const contentBox = ref(null);
+const props = defineProps(["chatContext"]);
+
+// 实现打字回复效果的动态位置调整
+await nextTick();
+let height = ref(0);
+watch(
+  () => chat.htmlBefore,
+  () => {
+    height.value = 0;
+    for (var i = 0; i <= contentBox.value.length - 1; i++) {
+      height.value += contentBox.value[i].offsetHeight;
+    }
+    if (height.value >= props.chatContext.offsetHeight) {
+      props.chatContext.scrollTo({
+        top: height.value - props.chatContext.offsetHeight + 100,
+        behavior: "smooth",
+      });
+    }
+  }
+);
 </script>
 
 <template>
@@ -24,14 +41,12 @@ const imgUrl =
     class="chat_container"
     v-for="(msg, index) in chat.messages"
     :key="index"
+    ref="contentBox"
   >
     <div class="answer_container" v-if="msg.role == 'assistant'">
       <img src="../assets/chatPGT.jpg" alt="" />
-      <span
-        class="answer_content"
-        v-html="converter.makeHtml(msg.content.replace('undefined', ''))"
-        :class="styleGitHubCss"
-      ></span>
+      <span class="answer_content" v-html="msg.content" :class="styleGitHubCss">
+      </span>
     </div>
     <div class="say_container" v-if="msg.role == 'user'">
       <span class="say_content"> {{ msg.content }} </span>
