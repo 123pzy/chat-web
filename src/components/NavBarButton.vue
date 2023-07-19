@@ -8,10 +8,6 @@ import { storeToRefs } from "pinia";
 const style = useStyle();
 const { fontColor, theme } = storeToRefs(style);
 const token = localStorage.getItem("token");
-const svg_sun_moon =
-  theme.value == "blackTheme"
-    ? "../assets/icon/moon.svg"
-    : "../assets/icon/sun.svg";
 // 获取用户名
 const username_res = await getUsername({ token });
 const username = username_res.data.username;

@@ -54,23 +54,16 @@ router.beforeEach(async (to, from) => {
     username,
     token
   }
-  if (token == null && username == null) {
-    ElMessage({
-      showClose: true,
-      message: '没有您的登录信息，请登陆后使用！',
-    });
-  }
-  else {
-    // 判断用户是否有token或者token是否过期
-    const res = await judgmentIsLogin({ data });
-    if (to.path != "/login") {
-      if (!res.data.islogin) {
-        ElMessage({
-          showClose: true,
-          message: `${res.data.message}`,
-        });
-        return "/login";
-      }
+
+  // 判断用户是否有token或者token是否过期
+  const res = await judgmentIsLogin({ data });
+  if (to.path != "/login") {
+    if (!res.data.islogin) {
+      ElMessage({
+        showClose: true,
+        message: `${res.data.message}`,
+      });
+      return "/login";
     }
   }
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, reactive } from "vue";
+import { ref, watch } from "vue";
 import { useChat } from "../stores/chat";
 import button from "../assets/icon/button.svg";
 
@@ -8,6 +8,7 @@ const btnStyle = ref({
   btn_focus: false,
   btn_no_focus: false,
 });
+
 // 监听input框里有没有值，给button添加动画效果
 watch(
   () => chat.say,

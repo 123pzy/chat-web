@@ -9,9 +9,10 @@ const {fontColor} = storeToRefs(style)
 <template>
   <div class="container">
     <div class="container_text">
-      <p class="text">
+      <p class="text_p">
         你这么聪明肯定不需要教程，不过既然点进来了，就让我我大致讲一下这个网站的用法吧~
       </p>
+      <h2 class="text_h2">（假装这里有一段500字的教程~~）</h2>
     </div>
   </div>
 </template>
@@ -32,8 +33,13 @@ $font-color: v-bind(fontColor);
   box-sizing: border-box;
   padding: 20px;
 }
-.text {
+.text_p {
   color: $font-color;
   text-indent: 2em; // 首行缩进
+}
+.text_h2{
+  color: #fff;
+  margin-top: 20px;
+  text-align: center;
 }
 </style>

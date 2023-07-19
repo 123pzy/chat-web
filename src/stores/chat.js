@@ -11,8 +11,11 @@ export const useChat = defineStore("chat", {
       htmlBefore: '',
       test: '',
       currentFuncBoard: '',
-      contentBox: ''
+      contentBox: '',
     };
+  },
+  getters: {
+
   },
   actions: {
     toSay() {
@@ -24,6 +27,6 @@ export const useChat = defineStore("chat", {
         this.say = "";
         this.pushed = !this.pushed;
       }
-    },
+    }
   },
 });

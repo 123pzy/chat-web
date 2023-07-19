@@ -13,7 +13,7 @@ const { fontColor, bgColor } = storeToRefs(style);
       <hr />
     </div>
     <span class="text"
-      >由于项目都是使用本人的个人chatGPT账号调用的API接口，每个用户只匹配了5次免费调用chatGPT的机会。扫二维码加我微信，我给你增加次数~</span
+      >由于项目都是使用本人的个人chatGPT账号调用的API接口，每个用户只匹配了20次免费使用chatGPT的机会。扫二维码加我微信，我给你增加次数~</span
     >
   </div>
 </template>

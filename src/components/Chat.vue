@@ -15,7 +15,6 @@ const imgUrl =
 
 const contentBox = ref(null);
 const props = defineProps(["chatContext"]);
-
 // 实现打字回复效果的动态位置调整
 await nextTick();
 let height = ref(0);
@@ -44,18 +43,13 @@ watch(
     ref="contentBox"
   >
     <div class="answer_container" v-if="msg.role == 'assistant'">
-      <img src="../assets/chatPGT.jpg" alt="" />
+      <img src="../assets/chatPGT.jpg" />
       <span class="answer_content" v-html="msg.content" :class="styleGitHubCss">
       </span>
     </div>
     <div class="say_container" v-if="msg.role == 'user'">
       <span class="say_content"> {{ msg.content }} </span>
-      <img
-        :src="imgUrl"
-        alt=""
-        @click="$router.push('/profile/edit')"
-        style="cursor: pointer"
-      />
+      <img :src="imgUrl" />
     </div>
   </div>
 </template>
@@ -71,6 +65,7 @@ $contentMarginTop: 25px;
   max-width: 800px;
   padding-left: 50%;
   padding-top: $contentMarginTop;
+  position: relative;
   .say_content {
     display: flex;
     align-items: center;
@@ -102,6 +97,12 @@ $contentMarginTop: 25px;
     height: 100%;
     width: 40px;
     margin-left: 15px;
+  }
+  .time_bar {
+    color: #dcdde1;
+    position: absolute;
+    top: 15px;
+    font-size: 12px;
   }
 }
 

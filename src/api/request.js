@@ -1,5 +1,4 @@
 import instance from "./index.js";
-import { baseURL } from "./config";
 
 const path = import.meta.env.MODE == "development" ? "/api" : "";
 

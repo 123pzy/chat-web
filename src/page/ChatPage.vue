@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBroad } from "../stores/funcBoard";
@@ -16,6 +16,8 @@ import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
 import showdown from "showdown";
 
+// 获取DOM
+const chatContext = ref(null);
 // 渲染输出的markdown样式
 let converter = new showdown.Converter();
 // 显示表格
@@ -49,7 +51,7 @@ const system_message = {
 chat.messages.push(system_message);
 const sended = ref(false); // 控制不能在上一次sendQuestion的请求没结束时就发送第二次请求
 // 定义html
-var chatRefs = storeToRefs(chat);
+// var chatRefs = storeToRefs(chat);
 async function sendQuestion() {
   chat.htmlBefore = "";
   if (chat.pushed == true && sended.value == false) {
@@ -92,7 +94,6 @@ async function sendQuestion() {
     }
   }
 }
-const chatContext = ref(null);
 </script>
 
 <template>

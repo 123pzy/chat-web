@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineAsyncComponent } from "vue";
+import { watch, defineAsyncComponent } from "vue";
 import { useChat } from "./stores/chat";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -30,7 +30,7 @@ watch(
     </header>
     <Suspense><router-view></router-view></Suspense>
   </template>
-  <template v-if="$route.name === 'login'">
+  <template v-else>
     <Suspense><LoginPage></LoginPage></Suspense>
   </template>
   </div>
