@@ -31,7 +31,7 @@ function changeColor() {
 <template>
   <div class="text_box">
     <span class="span_home" @click="$router.push('/')">首页</span>
-    <span class="span_2">AI画图</span>
+    <!-- <span class="span_2">AI画图</span> -->
     <span class="span_3" @click="$router.push('/gettutorial')">教程</span>
     <span class="span_4" @click="$router.push('/buyvip')">购买次数</span>
     <img
@@ -48,7 +48,7 @@ function changeColor() {
       @click="changeColor"
       v-else
     />
-    <img src="../assets/icon/bell.svg" alt="" class="icon_bell" />
+    <!-- <img src="../assets/icon/bell.svg" alt="" class="icon_bell" /> -->
     <div class="headImage_box">
       <img
         :src="imgUrl"

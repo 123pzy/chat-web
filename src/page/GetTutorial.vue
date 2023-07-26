@@ -29,7 +29,7 @@ $font-color: v-bind(fontColor);
   height: 80vh;
   width: 50vw;
   min-width: 300px;
-  position: absolute;
+  // position: absolute;
   box-sizing: border-box;
   padding: 20px;
 }
@@ -38,7 +38,7 @@ $font-color: v-bind(fontColor);
   text-indent: 2em; // 首行缩进
 }
 .text_h2{
-  color: #fff;
+  color: v-bind(fontColor);
   margin-top: 20px;
   text-align: center;
 }
