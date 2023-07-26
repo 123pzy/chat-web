@@ -48,12 +48,13 @@ const username = username_res.data.username;
 
 // 修改用户名
 async function changeUsername() {
-  if (input_content.value === null) {
+  let newUsername = input_content.value;
+  if (newUsername === null) {
     ElMessage({
       showClose: true,
       message: "请输入您要修改的用户名！",
     });
-  } else if (input_content.value.length > 6) {
+  } else if (newUsername.length > 6) {
     ElMessage({
       showClose: true,
       message: "用户名长度不能超过6个字符哦~",
@@ -61,13 +62,14 @@ async function changeUsername() {
   } else {
     const res = await updateUsername({
       token,
-      newUsername: input_content.value,
+      newUsername: newUsername,
     });
     alert(res.data.message);
     if (res.data.code == 1) {
+      localStorage.setItem("username", newUsername);
       router.go(0);
     } else {
-      input_content.value = "";
+      newUsername = "";
     }
   }
 }
