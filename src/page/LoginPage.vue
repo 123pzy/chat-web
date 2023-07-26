@@ -151,7 +151,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 <template>
   <div class="container">
-    <h1 class="title">chatGPT聊天网站</h1>
+    <h1 class="title">Chat万花筒</h1>
     <img src="../assets/icon/登陆注册页图片.svg" alt="" />
     <!-- 注册 -->
     <div class="register_container" v-if="already">
@@ -269,12 +269,11 @@ $font-color: v-bind(fontColor);
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   img {
     height: 50vh;
     width: 50vw;
-    // padding-right: 5vw;
   }
   .title {
     position: absolute;
@@ -285,14 +284,13 @@ $font-color: v-bind(fontColor);
   // 登录注册框
   .register_container,
   .login_container {
-    border: 2px solid $font-color;
+    // background: rgba(28, 32, 34, 0.8);
+    background: #fff;
     height: 320px;
     width: 360px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $font-color;
-    border-radius: 8%;
     margin-right: 1vw;
     .submit_box {
       display: flex;

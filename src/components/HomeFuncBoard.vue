@@ -26,40 +26,44 @@ const open = () => {
     }
   )
     .then(({ value }) => {
-      const message = value;
-      setTimeout(() => {
-        ElMessageBox.prompt("请给你的自定义板块起个名字", "输入板块名", {
-          confirmButtonText: "确认",
-          cancelButtonText: "取消",
-          inputErrorMessage: "输入的不对哦~",
-          lockScroll: false,
-        })
-          .then(({ value }) => {
-            console.log(value);
-            funcBoard_list.push({
-              id: funcBoard_list.length + 1,
-              func: value,
-              icon: "all",
-              label: "",
-              route: `chat_your-maked-${funcBoard_list.length + 1}`,
-              message: `${message}`,
-            });
-            ElMessage({
-              type: "success",
-              message: `自定义功能成功，快去试试吧！`,
-            });
+      if (value) {
+        const message = value;
+        setTimeout(() => {
+          ElMessageBox.prompt("请给你的自定义板块起个名字", "输入板块名", {
+            confirmButtonText: "确认",
+            cancelButtonText: "取消",
+            inputErrorMessage: "输入的不对哦~",
+            lockScroll: false,
           })
-          .catch(() => {
-            ElMessage({
-              type: "info",
-              message: "自定义功能很好玩的~再试试吧~",
+            .then(({ value }) => {
+              if (value) {
+                console.log(value);
+                funcBoard_list.push({
+                  id: funcBoard_list.length + 1,
+                  func: value,
+                  icon: "all",
+                  label: "",
+                  route: `chat_your-maked-${funcBoard_list.length + 1}`,
+                  message: `${message}`,
+                });
+                ElMessage({
+                  type: "success",
+                  message: `自定义功能成功，快去试试吧！`,
+                });
+              }
+            })
+            .catch(() => {
+              ElMessage({
+                type: "info",
+                message: "自定义功能很好玩的~再试试吧~",
+              });
             });
-          });
-      }, 500);
-      ElMessage({
-        type: "success",
-        message: `下面输入你自定义板块的名字吧`,
-      });
+        }, 500);
+        ElMessage({
+          type: "success",
+          message: `下面输入你自定义板块的名字吧`,
+        });
+      }
     })
     .catch(() => {
       ElMessage({

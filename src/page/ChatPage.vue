@@ -109,7 +109,7 @@ async function sendQuestion() {
         <InputComponent
           :height="35"
           :width="60"
-          placeholder="请输入你的问题..."
+          :placeholder="funcBoardList.placeholder"
           @keydown.enter.native="sendQuestion"
         ></InputComponent>
         <ButtonComponent @click.native="sendQuestion" />
@@ -136,6 +136,7 @@ async function sendQuestion() {
     .chat_context {
       margin-top: 3vh;
       width: 95%;
+      margin-left: 2.5%;
       overflow: auto; // 添加滚动条
       padding-bottom: 10px;
       border-bottom: 1px solid #353535;

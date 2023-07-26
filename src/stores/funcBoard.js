@@ -12,6 +12,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "",
           route: "chat_all",
           message: "你是一个万能的chatGPT",
+          placeholder: "我是万能的ChatGPT，请输入内容向我提问吧！",
         },
         {
           id: 2,
@@ -19,7 +20,8 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "coding",
           label: "编程",
           route: "chat_coding",
-          message: `你能帮我写代码吗？`,
+          message: `你现在是一个高级资深前端程序员，你能帮我写代码吗？`,
+          placeholder: "请用语言描述一下你想让我帮你写的代码...",
         },
         {
           id: 3,
@@ -27,7 +29,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "network",
           label: "编程",
           route: "chat_learn-js",
-          message: "给我讲解一下我所说的这个Javascript语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我讲解一下我所说的这个Javascript语法",
+          placeholder: "请直接向我讲出你想问的JavaScript代码即可...",
         },
         {
           id: 4,
@@ -35,7 +39,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "paper",
           label: "编程",
           route: "chat_learn-css",
-          message: "给我讲解一下我所说的这个CSS语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我讲解一下我所说的这个CSS语法",
+          placeholder: "请直接向我讲出你想问的CSS代码即可...",
         },
 
         {
@@ -44,7 +50,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "weigth-reduction",
           label: "编程",
           route: "chat_learn-html",
-          message: "给我讲解我所提到的html元素的用法",
+          message:
+            "你现在是一个高级资深前端程序员，给我讲解我所提到的html元素的用法",
+          placeholder: "请直接向我讲出你想问的HTML标签即可...",
         },
         {
           id: 6,
@@ -52,7 +60,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "article-expansion",
           label: "编程",
           route: "chat_learn-vue3",
-          message: "给我详细讲解一下我所提到的vue3的语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我详细讲解一下我所提到的vue3的语法",
+          placeholder: "请直接向我讲出你想问的vue3代码即可...",
         },
         {
           id: 7,
@@ -60,7 +70,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "little-red-book",
           label: "编程",
           route: "chat_learn-vue-router",
-          message: "给我详细讲解一下我所提到的vue-router的语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我详细讲解一下我所提到的vue-router的语法",
+          placeholder: "请直接向我讲出你想问的vue-router代码即可...",
         },
         {
           id: 8,
@@ -68,7 +80,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "writing-poetry",
           label: "编程",
           route: "chat_learn-react",
-          message: "给我详细讲解一下我所提到的React的语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我详细讲解一下我所提到的React的语法",
+          placeholder: "请直接向我讲出你想问的React代码即可...",
         },
         {
           id: 9,
@@ -76,7 +90,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "explain-code",
           label: "编程",
           route: "chat_learn-webgl",
-          message: "给我详细讲解一下我所提到的webGL的语法",
+          message:
+            "你现在是一个高级资深cesium程序员，给我详细讲解一下我所提到的webgl的语法",
+          placeholder: "请直接向我讲出你想问的webgl代码即可...",
         },
         {
           id: 10,
@@ -84,7 +100,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "video-scripts",
           label: "编程",
           route: "chat_learn-webgpu",
-          message: "给我详细讲解一下我所提到的webGPU的语法",
+          message:
+            "你现在是一个高级资深前端程序员，给我详细讲解一下我所提到的webGPU的语法",
+          placeholder: "请直接向我讲出你想问的webGPU代码即可...",
         },
         {
           id: 11,
@@ -93,6 +111,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "编程",
           route: "chat_learn-cesium",
           message: "给我详细讲解一下我所提到的Cesium的语法",
+          placeholder: "请直接向我讲出你想问的cesium代码即可...",
         },
         {
           id: 12,
@@ -101,6 +120,8 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "写作",
           route: "chat_paper-weight-reduction",
           message: "你现在是一个教授，把我给你的每段文字降重",
+          placeholder:
+            "又被论文难住了？没关系，在此处输入你的文字，我来帮你降重吧！",
         },
         {
           id: 13,
@@ -109,6 +130,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "写作",
           route: "chat_article-expansion",
           message: "你现在是一个教授，把我给你的文字扩写",
+          placeholder: "输入你想扩写的文章，等会儿给你惊喜哦！",
         },
         {
           id: 14,
@@ -118,6 +140,8 @@ export const useFuncBroad = defineStore("funcBoard", {
           route: "chat_chinesetoenglish",
           message:
             "你现在是一个翻译机器，把我对你说的每一句话翻译为英文，除了翻译的内容外不要发给我其他的内容！",
+          placeholder:
+            "我知道你英文很好，只是懒得翻译了吧，没关系，发给我就行！",
         },
         {
           id: 15,
@@ -126,7 +150,8 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "翻译",
           route: "chat_englishtochinese",
           message:
-            "你现在是一个翻译机器，把我对你说的每一句话翻译为中文，除了翻译的内容外不要发给我其他的内容！",
+            "你现在是一个翻译机器，把我对你说的每一句话翻译为中文，现在你不用跟我对话，只需要翻译我说的话就行！",
+          placeholder: "英文看不懂？发给我，我来帮你翻译成中文！",
         },
         {
           id: 16,
@@ -136,6 +161,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           route: "chat_polish-english-paper",
           message:
             "你现在是一个教授，把我给你的英文段落润色，要带有学术性，除了润色后的内外不要发给我其他的内容！",
+          placeholder: "把英文发给我，这篇sci拿定了！",
         },
         {
           id: 17,
@@ -144,6 +170,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "情感",
           route: "chat_beyourgrilfriend",
           message: "你现在来扮演我的女友，要对我可爱一点哦",
+          placeholder: "咳！现在我是你的女友大人，对我好好说话哦~",
         },
         {
           id: 18,
@@ -152,6 +179,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "情感",
           route: "chat_beyourboyfriend",
           message: "你现在是我的男朋友，跟我对话要像我男朋友一样，不要露馅哦！",
+          placeholder: "想要奶一点还是狼一点，告诉我，我都满足你！",
         },
         {
           id: 19,
@@ -159,7 +187,9 @@ export const useFuncBroad = defineStore("funcBoard", {
           icon: "sql-to-good",
           label: "编程",
           route: "chat_sql-optimization",
-          message: "你现在是一个资深后端程序员，把我给你的每个SQL语句优化一下",
+          message:
+            "你现在是一个高级资深后端程序员，把我给你的每个SQL语句优化一下",
+          placeholder: "发给我SQL代码，我来帮你优化吧！",
         },
         {
           id: 20,
@@ -168,14 +198,16 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "教育",
           route: "chat_debate",
           message: "你现在是一个辩论家，把我跟你的对话当成一场辩论赛！",
+          placeholder: "我现在是一个辩论家，有什么想辩论的尽管发来！",
         },
         {
           id: 21,
-          func: "起标题",
+          func: "夸夸你",
           icon: "all",
-          label: "教育",
+          label: "情感",
           route: "chat_make-title",
-          message: "把我给你的每段话起个标题",
+          message: "你是一个能说会道的chatgpt，你要好好夸夸我！",
+          placeholder: "你这么优秀，我已经等不及要夸你了，快来跟我对话吧~",
         },
         {
           id: 22,
@@ -184,6 +216,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "故事",
           route: "chat_make-story",
           message: "根据我说的话，编一个童话故事给我听",
+          placeholder: "告诉我几个关键词，我给你讲一个一千零一夜！",
         },
         {
           id: 23,
@@ -192,6 +225,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           label: "企业",
           route: "chat_product-manager",
           message: "你现在是一个高级产品经理！",
+          placeholder: "咳！我现在可是一个高级产品经理了，快来我这领需求！",
         },
         {
           id: 24,
@@ -201,6 +235,8 @@ export const useFuncBroad = defineStore("funcBoard", {
           route: "chat_say-love",
           message:
             "我喜欢上了一个人，根据我所说的我们两个之间的关系，帮我给他/她写一份200字左右的情书，谢谢！",
+          placeholder:
+            "被表白难住了？告诉我这个人的一些信息，我来教你怎么表白，稳了！",
         },
         {
           id: 25,
@@ -210,6 +246,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           route: "chat_debug",
           message:
             "你现在是一个高级程序员的角色，帮我查看我发给你的代码中是不是有bug，有bug的话告诉我怎么改，谢谢！",
+          placeholder: "你也被bug难住了？发我，我帮你看看。",
         },
         {
           id: 26,
@@ -219,6 +256,7 @@ export const useFuncBroad = defineStore("funcBoard", {
           route: "chat_code-comment",
           message:
             "你现在是一个高级程序员的角色，把我发给你的代码整理成markdown的格式，并把每行都标注上代码注释，谢谢！",
+          placeholder: "代码看不懂了？发我，我给你加上详细的注释！",
         },
       ],
     };
