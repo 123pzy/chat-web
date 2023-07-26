@@ -35,7 +35,7 @@ $bgColor: v-bind(bgColor);
 // 设置最外边的容器
 #button_content {
   height: 40px;
-  width: 100vw;
+  // width: 100vw;
   background-color: $bgColor;
   display: flex;
   align-items: center;

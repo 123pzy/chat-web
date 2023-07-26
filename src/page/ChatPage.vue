@@ -131,20 +131,21 @@ async function sendQuestion() {
   }
   .chat_content {
     flex: 4;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-rows: 1fr 80px;
     .chat_context {
       margin-top: 3vh;
-      height: 78vh;
       width: 95%;
       overflow: auto; // 添加滚动条
       padding-bottom: 10px;
       border-bottom: 1px solid #353535;
     }
-    // 隐藏滚动条：
+    // 隐藏滚动条
     ::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+
+    ::-webkit-scrollbar-thumb {
       display: none; /* Chrome Safari */
     }
 
@@ -155,8 +156,7 @@ async function sendQuestion() {
       justify-content: center;
       align-items: center;
       border: none;
-      position: fixed;
-      bottom: 30px;
+      margin-bottom: 30px;
     }
   }
 }

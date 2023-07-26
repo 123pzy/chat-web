@@ -33,7 +33,6 @@ $bgColor:v-bind(bgColor);
   width: 100%;
   min-height: 80px;
   box-shadow: 0 0 0 0.4px #57606f;
-  // border-bottom: 1px solid #57606f;
   background-color: $bgColor;
 }
 .icon_box {

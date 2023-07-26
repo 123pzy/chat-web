@@ -3,9 +3,9 @@ import sprite from "../assets/icon/sprite.svg";
 import sprite2 from "../assets/icon/sprite2.svg";
 import { useFuncBroad } from "../stores/funcBoard.js";
 import { useFuncCate } from "../stores/funcCate";
-import { ElMessage } from "element-plus";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const style = useStyle();
 const { fontColor, theme } = storeToRefs(style);
@@ -13,21 +13,61 @@ const funcBoard = useFuncBroad();
 const funcCate = useFuncCate();
 const funcBoard_list = funcBoard.funcBoard;
 
-function addFuncBoard() {
-  const func = prompt(
-    "请输入你要chatGPT扮演一个什么样的角色，比如你想让它做你的英语老师，检查你的英文是否包含语法错误，你就可以说，你现在是我的英文老师，检查我发给你的每段英文中是否包含语法错误。描述的越详细越好~"
-  );
-  if (func) {
-    funcBoard_list.push({
-      id: funcBoard_list.length + 1,
-      func: "你自定义的板块",
-      icon: "all",
-      label: "",
-      route: `chat_your-maked-${funcBoard_list.length + 1}`,
-      message: `${func}`,
+// element弹出输入框
+const open = () => {
+  ElMessageBox.prompt(
+    "请输入你要chatGPT扮演一个什么样的角色，比如你想让它做你的英语老师，检查你的英文是否包含语法错误，你就可以说:你现在是我的英文老师，检查我发给你的每段英文中是否包含语法错误。关于chatgpt扮演的角色描述的越详细越好~",
+    "自定义chatgpt",
+    {
+      confirmButtonText: "确认",
+      cancelButtonText: "取消",
+      inputErrorMessage: "输入的不对哦~",
+      lockScroll: false,
+    }
+  )
+    .then(({ value }) => {
+      const message = value;
+      setTimeout(() => {
+        ElMessageBox.prompt("请给你的自定义板块起个名字", "输入板块名", {
+          confirmButtonText: "确认",
+          cancelButtonText: "取消",
+          inputErrorMessage: "输入的不对哦~",
+          lockScroll: false,
+        })
+          .then(({ value }) => {
+            console.log(value);
+            funcBoard_list.push({
+              id: funcBoard_list.length + 1,
+              func: value,
+              icon: "all",
+              label: "",
+              route: `chat_your-maked-${funcBoard_list.length + 1}`,
+              message: `${message}`,
+            });
+            ElMessage({
+              type: "success",
+              message: `自定义功能成功，快去试试吧！`,
+            });
+          })
+          .catch(() => {
+            ElMessage({
+              type: "info",
+              message: "自定义功能很好玩的~再试试吧~",
+            });
+          });
+      }, 500);
+      ElMessage({
+        type: "success",
+        message: `下面输入你自定义板块的名字吧`,
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "自定义功能很好玩的~再试试吧~",
+      });
     });
-  }
-}
+};
 </script>
 
 <template>
@@ -47,7 +87,7 @@ function addFuncBoard() {
       </svg>
       <div>{{ board.func }}</div>
     </div>
-    <div @click="addFuncBoard">
+    <div @click="open">
       <img
         src="../assets/icon/plus.svg"
         alt=""
@@ -56,7 +96,9 @@ function addFuncBoard() {
       />
       <img src="../assets/icon/plus2.svg" alt="" class="addButton" v-else />
       <div>增加自定义功能</div>
+      <!-- <el-button text @click="open">增加自定义功能</el-button> -->
     </div>
+    <!-- element输入框 -->
   </div>
 </template>
 
@@ -65,7 +107,8 @@ $font-color: v-bind(fontColor);
 #boardContainer {
   // grid布局
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11vw, 150px));
+  grid-template-columns: repeat(auto-fill, minmax(10vw, 150px));
+  justify-content: center;
   gap: 20px;
   padding-top: 20px;
   margin-left: 30px;

@@ -30,7 +30,6 @@ const { showNum } = storeToRefs(style);
 <style lang="scss" scoped>
 .inp_box {
   height: 50px;
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
