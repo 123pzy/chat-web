@@ -118,7 +118,13 @@ const imgUrl2 =
       <el-button type="primary" @click="changeUsername" class="changeNameBtn"
         >修改用户名</el-button
       >
-      <div>剩余使用次数：{{ remainTimes }}</div>
+      <div>
+        剩余使用次数：{{
+          remainTimes > 1000
+            ? "你使用自己的token，本网站不限次使用！"
+            : remainTimes
+        }}
+      </div>
     </div>
   </div>
 </template>

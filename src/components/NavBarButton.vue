@@ -38,7 +38,7 @@ function changeColor() {
 const open = async () => {
   if (!haveToken.value) {
     ElMessageBox.prompt(
-      "如果你有自己的OpenAI账号，并且申请了token，可以在此处输入自己的token，提升该网站的使用流畅度：",
+      "你可以在此处输入自己openAI账号的token，提升该网站的使用流畅度，同时享受不限次数使用本网站！",
       "输入个人token",
       {
         confirmButtonText: "确认",
