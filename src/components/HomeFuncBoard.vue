@@ -37,7 +37,6 @@ const open = () => {
           })
             .then(({ value }) => {
               if (value) {
-                console.log(value);
                 funcBoard_list.push({
                   id: funcBoard_list.length + 1,
                   func: value,

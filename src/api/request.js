@@ -98,7 +98,7 @@ export async function haveOwnOpenAItoken(token) {
   return res.data.openAI_token;
 }
 
-// 提前用post请求传递message数组过去
+// 提前用get请求传递message数组过去
 export function sendMessageArray(data) {
   if (data.openAI_token) {
     return instance({
