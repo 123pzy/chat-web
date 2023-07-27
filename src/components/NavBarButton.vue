@@ -1,11 +1,18 @@
 <script setup>
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-import { getUsername, UseYourToken } from "../api/request";
+import {
+  getUsername,
+  UseYourToken,
+  haveOwnOpenAItoken,
+  deleteOpenAIToken,
+} from "../api/request";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
 
+let haveToken = ref(false); // 初始状态下默认没有上传自己的openAI的token
 const style = useStyle();
 const { fontColor, theme } = storeToRefs(style);
 const token = localStorage.getItem("token");
@@ -28,39 +35,61 @@ function changeColor() {
   style.changefontColor();
 }
 // 输入个人token
-const open = () => {
-  ElMessageBox.prompt(
-    "如果你有自己的OpenAI账号，并且申请了token，可以在此处输入自己的token，提升该网站的使用流畅度：",
-    "输入个人token",
-    {
-      confirmButtonText: "确认",
-      cancelButtonText: "取消",
-      inputErrorMessage: "输入有误！",
-      lockScroll: false,
-    }
-  )
-    .then(async ({ value }) => {
-      // // 发送请求，把用户的个人token传送到服务器
-      const data = { openAI_token: value, token: token };
-      const res = await UseYourToken(data);
-      ElMessage({
-        type: "success",
-        message: `${res.data.message}`,
+const open = async () => {
+  if (!haveToken.value) {
+    ElMessageBox.prompt(
+      "如果你有自己的OpenAI账号，并且申请了token，可以在此处输入自己的token，提升该网站的使用流畅度：",
+      "输入个人token",
+      {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        inputErrorMessage: "输入有误！",
+        lockScroll: false,
+      }
+    )
+      .then(async ({ value }) => {
+        // // 发送请求，把用户的个人token传送到服务器
+        const data = { openAI_token: value, token: token };
+        const res = await UseYourToken(data);
+        ElMessage({
+          type: "success",
+          message: `${res.data.message}`,
+        });
+        change();
+      })
+      .catch(() => {
+        ElMessage({
+          type: "info",
+          message: "使用个人token流畅度更好哦",
+        });
       });
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "使用个人token流畅度更好哦",
-      });
+  } else {
+    // 调用删除openAI_token接口
+    deleteOpenAIToken(token);
+    ElMessage({
+      showClose: true,
+      message: "你的openAI token已删除！",
+      type: "info",
     });
+    change();
+  }
 };
+// 判断是否上传了openAI_token
+async function change() {
+  const res_openAIt = await haveOwnOpenAItoken({ token });
+  if (res_openAIt !== "noOpenAI_token") {
+    haveToken.value = !haveToken.value;
+  }
+}
+change();
 </script>
 
 <template>
   <div class="text_box">
     <span class="span_home" @click="$router.push('/')">首页</span>
-    <span class="span_2" @click="open">使用自己的token</span>
+    <span class="span_2" @click="open">{{
+      haveToken ? "删除你的openAI Token" : "使用自己的token"
+    }}</span>
     <span class="span_3" @click="$router.push('/gettutorial')">教程</span>
     <span class="span_4" @click="$router.push('/buyvip')">购买次数</span>
     <img

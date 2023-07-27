@@ -80,10 +80,18 @@ export function UseYourToken(token) {
   });
 }
 
+// 删除个人openAI_token
+export function deleteOpenAIToken(token) {
+  return instance({
+    method: "DELETE",
+    url: path + `/profile/deleteOpenAIToken/${token}`,
+  });
+}
+
 // 调用ChatGPT
 export async function haveOwnOpenAItoken(token) {
   const res = await instance({
-    url: path + "/profile/haveOpenAIToken",
+    url: path + "/profile/haveOpenAIToken/",
     params: token,
   });
   return res.data.openAI_token;
