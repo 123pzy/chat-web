@@ -90,6 +90,7 @@ export function deleteOpenAIToken(token) {
 
 // 调用ChatGPT
 export async function haveOwnOpenAItoken(token) {
+  console.log('正在判断是否有token');
   const res = await instance({
     url: path + "/profile/haveOpenAIToken/",
     params: token,
@@ -99,11 +100,18 @@ export async function haveOwnOpenAItoken(token) {
 
 // 提前用post请求传递message数组过去
 export function sendMessageArray(data) {
-  return instance({
-    method: "POST",
-    url: "http://45.32.91.22:5001/sendMessage",
-    data,
-  });
+  if (data.openAI_token) {
+    return instance({
+      method: "get",
+      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${data.openAI_token}&message=${JSON.stringify(data.message)}`,
+    });
+  } else {
+    return instance({
+      method: "get",
+      url: `http://45.32.91.22:5001/sendMessage?message=${JSON.stringify(data.message)}`,
+    });
+  }
+
 }
 
 export const chatEventSource = () => {

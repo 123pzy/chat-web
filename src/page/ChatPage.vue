@@ -1,29 +1,29 @@
 <script setup>
-import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { useChat } from "../stores/chat";
-import { useFuncBroad } from "../stores/funcBoard";
-import InputComponent from "../components/InputComponent.vue";
-import ButtonComponent from "../components/ButtonComponent.vue";
-import Chat from "../components/Chat.vue";
-import { ElMessage } from "element-plus";
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useChat } from '../stores/chat';
+import { useFuncBroad } from '../stores/funcBoard';
+import InputComponent from '../components/InputComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
+import Chat from '../components/Chat.vue';
+import { ElMessage } from 'element-plus';
 import {
   deleteRemainTimes,
   getUsername,
   chatEventSource,
   haveOwnOpenAItoken,
   sendMessageArray,
-} from "../api/request";
-import { useStyle } from "../stores/style";
-import { storeToRefs } from "pinia";
-import showdown from "showdown";
+} from '../api/request';
+import { useStyle } from '../stores/style';
+import { storeToRefs } from 'pinia';
+import showdown from 'showdown';
 
 // 获取DOM
 const chatContext = ref(null);
 // 渲染输出的markdown样式
 let converter = new showdown.Converter();
 // 显示表格
-converter.setOption("tables", true);
+converter.setOption('tables', true);
 const style = useStyle();
 const { fontColor } = storeToRefs(style);
 // pinia
@@ -31,7 +31,7 @@ const route = useRoute();
 const chat = useChat();
 const funcbroad = useFuncBroad();
 // 获取用户名
-const token = localStorage.getItem("token");
+const token = localStorage.getItem('token');
 if (!!token) {
   var username_res = await getUsername({ token });
   var username = username_res.data.username;
@@ -43,11 +43,11 @@ const funcBoardList = funcbroad.funcBoard.find((item) => {
 // 判断是不是在自定义功能板块刷新了页面，是的话执行：
 let newMessage;
 if (funcBoardList == undefined) {
-  const func = prompt("请重新输入场景！");
+  const func = prompt('请重新输入场景！');
   newMessage = func;
 }
 const system_message = {
-  role: "system",
+  role: 'system',
   content: `${funcBoardList != undefined ? funcBoardList.message : newMessage}`,
 };
 chat.messages.push(system_message);
@@ -55,7 +55,7 @@ const sended = ref(false); // 控制不能在上一次sendQuestion的请求没�
 // 定义html
 // var chatRefs = storeToRefs(chat);
 async function sendQuestion() {
-  chat.htmlBefore = "";
+  chat.htmlBefore = '';
   if (chat.pushed == true && sended.value == false) {
     sended.value = !sended.value;
     // chatGPT免费使用次数减一
@@ -64,10 +64,10 @@ async function sendQuestion() {
     if (remainTimesRes.data.remainTimes >= 0) {
       // 发送SSE请求,重点！
       const tokenObj = { token: token };
-      const res_openAIt = await haveOwnOpenAItoken(tokenObj);
-      if (res_openAIt !== "noOpenAI_token") {
+      const res_openAItoken = await haveOwnOpenAItoken(tokenObj);
+      if (res_openAItoken !== 'noOpenAI_token') {
         // 发送请求，传递openAI_token和messageArr
-        let data = { openAI_token: res_openAIt, message: chat.messages };
+        let data = { openAI_token: res_openAItoken, message: chat.messages };
         await sendMessageArray(data);
       } else {
         // 发送请求，只传递messageArr
@@ -76,21 +76,26 @@ async function sendQuestion() {
       }
       const eventSource = chatEventSource();
       chat.messages.push({
-        role: "assistant",
-        content: "",
+        role: 'assistant',
+        content: '',
       });
       eventSource.onmessage = (event) => {
-        if (!event.data.includes("[DONE]")) {
+        if (!event.data.includes('[DONE]')) {
           chat.htmlBefore += event.data;
           chat.messages[chat.messages.length - 1].content = converter.makeHtml(
             chat.htmlBefore
           );
-        } else if (event.data.includes("[DONE]")) {
+        } else if (event.data.includes('[DONE]')) {
           eventSource.close();
         }
       };
       eventSource.onerror = (error) => {
-        console.error("流式传输发生错误：", error);
+        console.error('流式传输发生错误：', error);
+        ElMessage({
+          showClose: true,
+          message: '你给的token似乎不太对哦',
+          type: 'error',
+        });
       };
       chat.pushed = !chat.pushed;
       sended.value = !sended.value;
@@ -98,7 +103,7 @@ async function sendQuestion() {
       ElMessage({
         showClose: true,
         message: `${remainTimesRes.data.message}`,
-        type: "error",
+        type: 'error',
       });
     }
   } else {
