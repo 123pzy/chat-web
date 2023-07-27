@@ -11,6 +11,8 @@ import {
   deleteRemainTimes,
   getUsername,
   chatEventSource,
+  haveOwnOpenAItoken,
+  sendMessageArray,
 } from "../api/request";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
@@ -61,7 +63,18 @@ async function sendQuestion() {
     // 判断是否还有使用次数
     if (remainTimesRes.data.remainTimes >= 0) {
       // 发送SSE请求,重点！
-      const eventSource = chatEventSource(chat.messages);
+      const tokenObj = { token: token };
+      const res_openAIt = await haveOwnOpenAItoken(tokenObj);
+      if (res_openAIt !== "noOpenAI_token") {
+        // 发送请求，传递openAI_token和messageArr
+        let data = { openAI_token: res_openAIt, message: chat.messages };
+        await sendMessageArray(data);
+      } else {
+        // 发送请求，只传递messageArr
+        let data = { message: chat.messages };
+        await sendMessageArray(data);
+      }
+      const eventSource = chatEventSource();
       chat.messages.push({
         role: "assistant",
         content: "",

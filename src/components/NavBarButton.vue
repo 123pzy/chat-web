@@ -1,9 +1,10 @@
 <script setup>
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-import { getUsername } from "../api/request";
+import { getUsername, UseYourToken } from "../api/request";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const style = useStyle();
 const { fontColor, theme } = storeToRefs(style);
@@ -14,7 +15,7 @@ const username = username_res.data.username;
 const router = useRouter();
 // 退出登录
 function logout() {
-  localStorage.removeItem("token");
+  localStorage.clear();
   router.go(0);
 }
 const imgUrl =
@@ -26,12 +27,40 @@ const imgUrl =
 function changeColor() {
   style.changefontColor();
 }
+// 输入个人token
+const open = () => {
+  ElMessageBox.prompt(
+    "如果你有自己的OpenAI账号，并且申请了token，可以在此处输入自己的token，提升该网站的使用流畅度：",
+    "输入个人token",
+    {
+      confirmButtonText: "确认",
+      cancelButtonText: "取消",
+      inputErrorMessage: "输入有误！",
+      lockScroll: false,
+    }
+  )
+    .then(async ({ value }) => {
+      // // 发送请求，把用户的个人token传送到服务器
+      const data = { openAI_token: value, token: token };
+      const res = await UseYourToken(data);
+      ElMessage({
+        type: "success",
+        message: `${res.data.message}`,
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "使用个人token流畅度更好哦",
+      });
+    });
+};
 </script>
 
 <template>
   <div class="text_box">
     <span class="span_home" @click="$router.push('/')">首页</span>
-    <!-- <span class="span_2">AI画图</span> -->
+    <span class="span_2" @click="open">使用自己的token</span>
     <span class="span_3" @click="$router.push('/gettutorial')">教程</span>
     <span class="span_4" @click="$router.push('/buyvip')">购买次数</span>
     <img

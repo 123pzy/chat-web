@@ -70,9 +70,34 @@ export const judgmentIsLogin = (data) => {
 //     data,
 //   })
 // }
-export const chatEventSource = (message) => {
-  console.log('chat了一次');
-  return new EventSource(
-    `http://45.32.91.22:5001/chat?chatContentArray=${JSON.stringify(message)}`
-  );
+
+// 上传个人token
+export function UseYourToken(token) {
+  return instance({
+    method: "POST",
+    url: path + "/profile/chat/openaitoken",
+    data: token,
+  });
 }
+
+// 调用ChatGPT
+export async function haveOwnOpenAItoken(token) {
+  const res = await instance({
+    url: path + "/profile/haveOpenAIToken",
+    params: token,
+  });
+  return res.data.openAI_token;
+}
+
+// 提前用post请求传递message数组过去
+export function sendMessageArray(data) {
+  return instance({
+    method: "POST",
+    url: "http://45.32.91.22:5001/sendMessage",
+    data,
+  });
+}
+
+export const chatEventSource = () => {
+  return new EventSource(`http://45.32.91.22:5001/chat`);
+};
