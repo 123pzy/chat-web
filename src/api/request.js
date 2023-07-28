@@ -90,7 +90,6 @@ export function deleteOpenAIToken(token) {
 
 // 调用ChatGPT
 export async function haveOwnOpenAItoken(token) {
-  console.log('正在判断是否有token');
   const res = await instance({
     url: path + "/profile/haveOpenAIToken/",
     params: token,
@@ -103,17 +102,28 @@ export function sendMessageArray(data) {
   if (data.openAI_token) {
     return instance({
       method: "get",
-      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${data.openAI_token}&message=${JSON.stringify(data.message)}`,
+      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${
+        data.openAI_token
+      }&message=${JSON.stringify(data.message)}`,
     });
   } else {
     return instance({
       method: "get",
-      url: `http://45.32.91.22:5001/sendMessage?message=${JSON.stringify(data.message)}`,
+      url: `http://45.32.91.22:5001/sendMessage?message=${JSON.stringify(
+        data.message
+      )}`,
     });
   }
-
 }
 
 export const chatEventSource = () => {
   return new EventSource(`http://45.32.91.22:5001/chat`);
 };
+
+// 获取funcBoard
+export function getUsersFuncBoard(token) {
+  console.log("getUsersFuncBoard");
+  return instance({
+    url: path + `/profile/getFuncBoard/${token}`,
+  });
+}

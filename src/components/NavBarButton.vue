@@ -65,7 +65,7 @@ const open = async () => {
       });
   } else {
     // 调用删除openAI_token接口
-    deleteOpenAIToken(token);
+    await deleteOpenAIToken(token);
     ElMessage({
       showClose: true,
       message: "你的openAI token已删除！",
@@ -78,7 +78,9 @@ const open = async () => {
 async function change() {
   const res_openAIt = await haveOwnOpenAItoken({ token });
   if (res_openAIt !== "noOpenAI_token") {
-    haveToken.value = !haveToken.value;
+    haveToken.value = true;
+  } else {
+    haveToken.value = false;
   }
 }
 change();

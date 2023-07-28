@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { useChat } from "./chat";
+import { getUsersFuncBoard } from "../api/request";
+const token = localStorage.getItem("token");
 
 export const useFuncBroad = defineStore("funcBoard", {
   state: () => {
@@ -260,5 +261,11 @@ export const useFuncBroad = defineStore("funcBoard", {
         },
       ],
     };
+  },
+  actions: {
+    async getFuncBoard() {
+      const res = await getUsersFuncBoard(token);
+      console.log("res", res, token);
+    },
   },
 });
