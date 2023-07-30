@@ -13,7 +13,7 @@ const chat = useChat();
   <input
     type="text"
     class="input"
-    :placeholder="props.placeholder"
+    :placeholder="props.placeholder||'请输入...'"
     v-model="chat.say"
     @keydown.enter="chat.toSay()"
   />

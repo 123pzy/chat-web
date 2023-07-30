@@ -102,9 +102,8 @@ export function sendMessageArray(data) {
   if (data.openAI_token) {
     return instance({
       method: "get",
-      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${
-        data.openAI_token
-      }&message=${JSON.stringify(data.message)}`,
+      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${data.openAI_token
+        }&message=${JSON.stringify(data.message)}`,
     });
   } else {
     return instance({
@@ -120,10 +119,28 @@ export const chatEventSource = () => {
   return new EventSource(`http://45.32.91.22:5001/chat`);
 };
 
-// 获取funcBoard
-export function getUsersFuncBoard(token) {
+// 从数据库获取funcBoard
+export function getUsersFuncBoard(username) {
   console.log("getUsersFuncBoard");
   return instance({
-    url: path + `/profile/getFuncBoard/${token}`,
+    url: path + `/profile/getFuncBoard/${username}`,
   });
+}
+
+// 添加func
+export function setUsersFuncBoard(data) {
+  return instance({
+    method: 'POST',
+    url: path + '/profile/setFuncBoard/funcBoard',
+    data,
+  })
+}
+
+// 删除func
+export function deleteUsersFuncBoard(data) {
+  console.log('id:',data );
+  return instance({
+    method: 'DELETE',
+    url: path + `/profile/deleteFuncBoard/${JSON.stringify(data)}`,
+  })
 }
