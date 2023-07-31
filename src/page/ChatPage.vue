@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBoard } from "../stores/funcBoard";
 import InputComponent from "../components/InputComponent.vue";
@@ -13,47 +13,26 @@ import {
   chatEventSource,
   haveOwnOpenAItoken,
   sendMessageArray,
+  getUsersFuncBoard,
 } from "../api/request";
-import { useStyle } from "../stores/style";
-import { storeToRefs } from "pinia";
-import showdown from "showdown";
+import { marked } from "marked";
 
 // 获取DOM
 const chatContext = ref(null);
-// 渲染输出的markdown样式
-let converter = new showdown.Converter();
-// 显示表格
-converter.setOption("tables", true);
-const style = useStyle();
-const { fontColor } = storeToRefs(style);
 // pinia
 const route = useRoute();
 const chat = useChat();
 const funcBoard = useFuncBoard();
+// router
+const router = useRouter();
 // 获取用户名
 const token = localStorage.getItem("token");
 if (!!token) {
   var username_res = await getUsername({ token });
   var username = username_res.data.username;
 }
-// 传递system的content到chat.js中：
-const funcBoardList = funcBoard.funcBoard.find((item) => {
-  return item.route == route.params.route;
-});
-// 判断是不是在自定义功能板块刷新了页面，是的话执行：
-let newMessage;
-if (funcBoardList == undefined) {
-  const func = prompt("请重新输入场景！");
-  newMessage = func;
-}
-const system_message = {
-  role: "system",
-  content: `${funcBoardList != undefined ? funcBoardList.message : newMessage}`,
-};
-chat.messages.push(system_message);
 const sended = ref(false); // 控制不能在上一次sendQuestion的请求没结束时就发送第二次请求
 // 定义html
-// var chatRefs = storeToRefs(chat);
 async function sendQuestion() {
   chat.htmlBefore = "";
   if (chat.pushed == true && sended.value == false) {
@@ -82,11 +61,10 @@ async function sendQuestion() {
       eventSource.onmessage = (event) => {
         if (!event.data.includes("[DONE]")) {
           chat.htmlBefore += event.data;
-          chat.messages[chat.messages.length - 1].content = converter.makeHtml(
+          chat.messages[chat.messages.length - 1].content = marked.parse(
             chat.htmlBefore
           );
         } else if (event.data.includes("[DONE]")) {
-          console.log("[DONE]");
           eventSource.close();
         }
       };
@@ -113,12 +91,46 @@ async function sendQuestion() {
     }
   }
 }
+
+// 点击侧边栏按钮跳转chat界面
+async function handleRouterPush(route) {
+  console.log(route);
+  await router.push(route);
+  reGetFuncBoard();
+}
+
+// 重新获取funcBoard
+async function reGetFuncBoard() {
+  const res = await getUsersFuncBoard(username);
+  funcBoard.funcBoard = JSON.parse(res.data.funcBoard);
+  funcBoard.funcBoardCurrent = funcBoard.funcBoard.find((item) => {
+    return item.route == route.params.route;
+  });
+  const system_message = {
+    role: "system",
+    content: funcBoard.funcBoardCurrent.message,
+  };
+  chat.messages.push(system_message);
+}
+
+onMounted(async () => {
+  reGetFuncBoard();
+});
 </script>
 
 <template>
   <div class="chat_container">
     <aside class="chat_history">
-      <div class="chat_every_history"></div>
+      <div class="func-btn-title">切换模块</div>
+      <div class="chat_every_history">
+        <div
+          v-for="board in funcBoard.funcBoard"
+          class="func-btn"
+          @click="handleRouterPush(board.route)"
+        >
+          {{ board.func }}
+        </div>
+      </div>
     </aside>
     <div class="chat_content">
       <div class="chat_context" ref="chatContext">
@@ -128,8 +140,8 @@ async function sendQuestion() {
         <InputComponent
           :height="35"
           :width="60"
-          :placeholder="funcBoardList.placeholder||'请输入...'"
           @keydown.enter.native="sendQuestion"
+          :placeholder="funcBoard.funcBoardCurrent.placeholder || '请输入...'"
         ></InputComponent>
         <ButtonComponent @click.native="sendQuestion" />
       </div>
@@ -140,18 +152,46 @@ async function sendQuestion() {
 <style lang="scss" scoped>
 .chat_container {
   display: flex;
-  height: 91vh;
+  height: 88.5vh;
   width: 100%;
   box-sizing: border-box;
 
   .chat_history {
     flex: 1;
-    border-right: 2px solid v-bind(fontColor);
+    border-right: 2px solid #666;
+    overflow: auto; // 添加滚动条
+    .func-btn-title {
+      color: #fff;
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .chat_every_history {
+      padding-left: 8px;
+      padding-right: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      text-align: center;
+      .func-btn {
+        color: #fff;
+        font-size: 14px;
+        height: 35px;
+        box-shadow: 0 0 0 0.5px #4ca488;
+        line-height: 35px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+        cursor: pointer;
+      }
+    }
   }
   .chat_content {
     flex: 4;
     display: grid;
-    grid-template-rows: 1fr 80px;
+    grid-template-rows: 1fr 70px;
     .chat_context {
       margin-top: 3vh;
       width: 95%;
@@ -176,7 +216,7 @@ async function sendQuestion() {
       justify-content: center;
       align-items: center;
       border: none;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
 }

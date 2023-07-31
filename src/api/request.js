@@ -99,11 +99,13 @@ export async function haveOwnOpenAItoken(token) {
 
 // 提前用get请求传递message数组过去
 export function sendMessageArray(data) {
+  console.log("data", data);
   if (data.openAI_token) {
     return instance({
       method: "get",
-      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${data.openAI_token
-        }&message=${JSON.stringify(data.message)}`,
+      url: `http://45.32.91.22:5001/sendMessage?openAI_token=${
+        data.openAI_token
+      }&message=${JSON.stringify(data.message)}`,
     });
   } else {
     return instance({
@@ -129,17 +131,17 @@ export function getUsersFuncBoard(username) {
 // 添加func
 export function setUsersFuncBoard(data) {
   return instance({
-    method: 'POST',
-    url: path + '/profile/setFuncBoard/funcBoard',
+    method: "POST",
+    url: path + "/profile/setFuncBoard/funcBoard",
     data,
-  })
+  });
 }
 
 // 删除func
 export function deleteUsersFuncBoard(data) {
-  console.log('id:',data );
+  console.log("id:", data);
   return instance({
-    method: 'DELETE',
+    method: "DELETE",
     url: path + `/profile/deleteFuncBoard/${JSON.stringify(data)}`,
-  })
+  });
 }

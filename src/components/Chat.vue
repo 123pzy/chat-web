@@ -74,7 +74,6 @@ $contentMarginTop: 25px;
     // 设置自动换行：
     word-wrap: break-word;
     word-break: break-all;
-    // text-align: center;
     min-height: 40px;
     padding-top: 10px;
     padding-bottom: 10px;

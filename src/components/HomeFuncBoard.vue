@@ -50,7 +50,8 @@ const open = () => {
             .then(async ({ value }) => {
               if (value) {
                 const func = {
-                  id: funcBoard.funcBoard.length + 1,
+                  id:
+                    funcBoard.funcBoard[funcBoard.funcBoard.length - 1].id + 1,
                   func: value,
                   icon: "all",
                   label: "",
@@ -116,6 +117,7 @@ function mouseEnter(id) {
   let btn = deleteBtn.value.find((item) => {
     return item.id == id;
   });
+  console.log(btn);
   btn.style.display = "block";
 }
 // 鼠标移出事件
@@ -130,7 +132,7 @@ onMounted(async () => {
   funcBoard.getFuncBoard(username);
 });
 onBeforeUnmount(() => {
-  deleteBtn = '';
+  deleteBtn = "";
 });
 </script>
 
@@ -170,9 +172,7 @@ onBeforeUnmount(() => {
       />
       <img src="../assets/icon/plus2.svg" alt="" class="addButton" v-else />
       <div>增加自定义功能</div>
-      <!-- <el-button text @click="open">增加自定义功能</el-button> -->
     </div>
-    <!-- element输入框 -->
   </div>
 </template>
 

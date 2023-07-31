@@ -5,6 +5,7 @@ export const useFuncBoard = defineStore("funcBoard", {
   state: () => {
     return {
       funcBoard: [],
+      funcBoardCurrent: [],
     };
   },
   actions: {
