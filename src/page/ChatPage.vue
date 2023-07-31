@@ -96,7 +96,7 @@ async function sendQuestion() {
 async function handleRouterPush(route) {
   console.log(route);
   await router.push(route);
-  reGetFuncBoard();
+  await reGetFuncBoard();
 }
 
 // 重新获取funcBoard
@@ -111,6 +111,7 @@ async function reGetFuncBoard() {
     content: funcBoard.funcBoardCurrent.message,
   };
   chat.messages.push(system_message);
+  console.log(funcBoard.funcBoardCurrent);
 }
 
 onMounted(async () => {
