@@ -117,7 +117,6 @@ function mouseEnter(id) {
   let btn = deleteBtn.value.find((item) => {
     return item.id == id;
   });
-  console.log(btn);
   btn.style.display = "block";
 }
 // 鼠标移出事件

@@ -94,7 +94,6 @@ async function sendQuestion() {
 
 // 点击侧边栏按钮跳转chat界面
 async function handleRouterPush(route) {
-  console.log(route);
   await router.push(route);
   await reGetFuncBoard();
 }
@@ -111,7 +110,6 @@ async function reGetFuncBoard() {
     content: funcBoard.funcBoardCurrent.message,
   };
   chat.messages.push(system_message);
-  console.log(funcBoard.funcBoardCurrent);
 }
 
 onMounted(async () => {
