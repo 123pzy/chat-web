@@ -1,29 +1,28 @@
 <script setup>
 import sprite from "../assets/icon/sprite.svg";
 import sprite2 from "../assets/icon/sprite2.svg";
-import { useFuncBroad } from "../stores/funcBoard.js";
+import { useFuncBoard } from "../stores/funcBoard.js";
 import { useFuncCate } from "../stores/funcCate";
 import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { setUsersFuncBoard, deleteUsersFuncBoard } from "../api/request";
-import { onMounted, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const style = useStyle();
 const { fontColor, theme } = storeToRefs(style);
-const funcBoard = useFuncBroad();
+const funcBoard = useFuncBoard();
 const funcCate = useFuncCate();
 const username = localStorage.getItem("username");
 const router = useRouter();
-const deleteBtn = ref();
+let deleteBtn = ref(null);
 
 // 点击板块跳转chatpage组件
-function handleClick(e, route) {
+function handleRouterPush(e, route) {
   if (e.target.tagName != "IMG") {
     router.push(route);
   }
-  console.log(e.target.tagName);
 }
 
 // element弹出输入框,用于自定义添加funcBoard板块
@@ -114,14 +113,14 @@ async function deleteFuncBoard(id) {
 
 // funcBoard的鼠标移入事件
 function mouseEnter(id) {
-  const btn = deleteBtn.value.find((item) => {
+  let btn = deleteBtn.value.find((item) => {
     return item.id == id;
   });
   btn.style.display = "block";
 }
 // 鼠标移出事件
 function mouseLeave(id) {
-  const btn = deleteBtn.value.find((item) => {
+  let btn = deleteBtn.value.find((item) => {
     return item.id == id;
   });
   btn.style.display = "none";
@@ -130,6 +129,9 @@ onMounted(async () => {
   const username = localStorage.getItem("username");
   funcBoard.getFuncBoard(username);
 });
+onBeforeUnmount(() => {
+  deleteBtn = '';
+});
 </script>
 
 <template>
@@ -137,7 +139,7 @@ onMounted(async () => {
     <div
       v-for="board in funcBoard.funcBoard"
       v-show="funcCate.cate === '全部' ? true : board.label === funcCate.cate"
-      @click="handleClick($event, board.route)"
+      @click="handleRouterPush($event, board.route)"
       @mouseenter="mouseEnter(board.id)"
       @mouseleave="mouseLeave(board.id)"
       class="board-box"

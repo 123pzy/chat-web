@@ -121,7 +121,6 @@ export const chatEventSource = () => {
 
 // 从数据库获取funcBoard
 export function getUsersFuncBoard(username) {
-  console.log("getUsersFuncBoard");
   return instance({
     url: path + `/profile/getFuncBoard/${username}`,
   });

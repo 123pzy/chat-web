@@ -4,12 +4,9 @@ import HomeFuncBoard from "../components/HomeFuncBoard.vue";
 import InputComponent from "../components/InputComponent.vue";
 import { useFuncCate } from "../stores/funcCate";
 import { useChat } from "../stores/chat";
-import { useFuncBroad } from "../stores/funcBoard";
-import { onMounted } from "vue";
 
 const funcCate = useFuncCate();
 const chat = useChat();
-const funcBoard = useFuncBroad();
 
 </script>
 

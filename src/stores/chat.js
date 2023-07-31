@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useFuncBroad } from "./funcBoard";
+import { useFuncBoard } from "./funcBoard";
 
 export const useChat = defineStore("chat", {
   state: () => {
