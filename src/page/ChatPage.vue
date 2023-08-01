@@ -16,7 +16,10 @@ import {
   getUsersFuncBoard,
 } from "../api/request";
 import { marked } from "marked";
+import { useStyle } from "../stores/style";
 import { storeToRefs } from "pinia";
+// 按需引入图标
+import { Switch } from "@element-plus/icons-vue";
 
 // 获取DOM
 const chatContext = ref(null);
@@ -25,6 +28,9 @@ const route = useRoute();
 const chat = useChat();
 const { temperature } = storeToRefs(chat);
 const funcBoard = useFuncBoard();
+const style = useStyle();
+var fontColor = "#fff";
+var { fontColor } = storeToRefs(style);
 // router
 const router = useRouter();
 // 获取用户名
@@ -41,13 +47,13 @@ async function sendQuestion() {
     if (!haveToken) {
       // chatGPT免费使用次数减一
       const remainTimesRes = await deleteRemainTimes(username);
-      console.log("你的剩余次数为", remainTimesRes);
       // 判断是否还有使用次数
       if (remainTimesRes.data.remainTimes >= 0) {
         // 发送SSE请求,重点！
         // 发送请求，只传递messageArr
         let data = { temperature: temperature.value, message: chat.messages };
         await sendMessageArray(data);
+        console.log("你的剩余次数为", chat.messages);
         sendEventSource();
       } else {
         ElMessage({
@@ -66,7 +72,7 @@ async function sendQuestion() {
         message: chat.messages,
       };
       await sendMessageArray(data);
-      console.log("你使用自己的token，本网站不限次使用!");
+      console.log("你使用自己的token，本网站不限次使用!", chat.messages);
       sendEventSource();
     }
   }
@@ -127,7 +133,9 @@ onMounted(async () => {
 <template>
   <div class="chat_container">
     <aside class="chat_history">
-      <div class="func-btn-title">切换模块</div>
+      <div class="func-btn-title">
+        <Switch style="height: 15px; margin-right: 5px" />切换模块
+      </div>
       <div class="chat_every_history">
         <div
           v-for="board in funcBoard.funcBoard"
@@ -177,6 +185,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+$font-color: v-bind(fontColor);
 .chat_container {
   display: flex;
   height: 88.5vh;
@@ -188,7 +197,7 @@ onMounted(async () => {
     border-right: 2px solid #666;
     overflow: auto; // 添加滚动条
     .func-btn-title {
-      color: #fff;
+      color: #999;
       width: 100%;
       height: 50px;
       line-height: 50px;
@@ -199,11 +208,11 @@ onMounted(async () => {
       padding-left: 8px;
       padding-right: 8px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(6vw, 1fr));
       gap: 0.8rem;
       text-align: center;
       .func-btn {
-        color: #fff;
+        color: #999;
         font-size: 14px;
         height: 35px;
         box-shadow: 0 0 0 0.5px #4ca488;

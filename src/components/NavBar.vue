@@ -1,10 +1,10 @@
 <script setup>
 import NavBarButton from "../components/NavBarButton.vue";
 import { useStyle } from "../stores/style";
-import {storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 
-const style = useStyle()
-const {bgColor,fontColor} = storeToRefs(style)
+const style = useStyle();
+const { bgColor, fontColor } = storeToRefs(style);
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const {bgColor,fontColor} = storeToRefs(style)
 
 <style lang="scss" scoped>
 $font-color: v-bind(fontColor);
-$bgColor:v-bind(bgColor);
+$bgColor: v-bind(bgColor);
 #nav {
   display: flex;
   justify-content: space-between;
