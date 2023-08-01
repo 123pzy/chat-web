@@ -87,6 +87,7 @@ function sendEventSource() {
   eventSource.onmessage = (event) => {
     if (!event.data.includes("[DONE]")) {
       chat.htmlBefore += event.data;
+      marked.setOptions({ mangle: false, headerIds: false }); // 消除警告
       chat.messages[chat.messages.length - 1].content = marked.parse(
         chat.htmlBefore
       );
