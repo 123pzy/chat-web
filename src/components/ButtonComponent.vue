@@ -25,7 +25,7 @@ watch(
 </script>
 
 <template>
-  <button @click="chat.toSay" :class="btnStyle">
+  <button :class="btnStyle">
     <img src="../assets/icon/button.svg" alt="" class="icon-button" />
   </button>
 </template>

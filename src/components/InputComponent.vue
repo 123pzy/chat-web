@@ -15,7 +15,6 @@ const chat = useChat();
     class="input"
     v-model="chat.say"
     :placeholder="props.placeholder || '请输入...'"
-    @keydown.enter="chat.toSay()"
   />
 </template>
 

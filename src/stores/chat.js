@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useFuncBoard } from "./funcBoard";
 
 export const useChat = defineStore("chat", {
   state: () => {
@@ -7,15 +6,9 @@ export const useChat = defineStore("chat", {
       say: "",
       messages: [],
       pushed: false,
-      content: "",
-      htmlBefore: '',
-      test: '',
-      currentFuncBoard: '',
-      contentBox: '',
+      htmlBefore: "",
+      temperature: 0.8,
     };
-  },
-  getters: {
-
   },
   actions: {
     toSay() {
@@ -25,8 +18,9 @@ export const useChat = defineStore("chat", {
           content: `${this.say}`,
         });
         this.say = "";
-        this.pushed = !this.pushed;
+        this.pushed = true;
+        return this.pushed;
       }
-    }
+    },
   },
 });

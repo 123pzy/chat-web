@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBoard } from "../stores/funcBoard";
@@ -16,6 +16,7 @@ import {
   getUsersFuncBoard,
 } from "../api/request";
 import { marked } from "marked";
+import { storeToRefs } from "pinia";
 
 // 获取DOM
 const chatContext = ref(null);
@@ -31,12 +32,10 @@ if (!!token) {
   var username_res = await getUsername({ token });
   var username = username_res.data.username;
 }
-const sended = ref(false); // 控制不能在上一次sendQuestion的请求没结束时就发送第二次请求
 // 定义html
 async function sendQuestion() {
-  chat.htmlBefore = "";
-  if (chat.pushed == true && sended.value == false) {
-    sended.value = !sended.value;
+  if (chat.toSay()) {
+    chat.htmlBefore = "";
     // chatGPT免费使用次数减一
     const remainTimesRes = await deleteRemainTimes(username);
     // 判断是否还有使用次数
@@ -46,11 +45,15 @@ async function sendQuestion() {
       const res_openAItoken = await haveOwnOpenAItoken(tokenObj);
       if (res_openAItoken !== "noOpenAI_token") {
         // 发送请求，传递openAI_token和messageArr
-        let data = { openAI_token: res_openAItoken, message: chat.messages };
+        let data = {
+          openAI_token: res_openAItoken,
+          temperature: temperature.value,
+          message: chat.messages,
+        };
         await sendMessageArray(data);
       } else {
         // 发送请求，只传递messageArr
-        let data = { message: chat.messages };
+        let data = { temperature: temperature.value, message: chat.messages };
         await sendMessageArray(data);
       }
       const eventSource = chatEventSource();
@@ -66,6 +69,7 @@ async function sendQuestion() {
           );
         } else if (event.data.includes("[DONE]")) {
           eventSource.close();
+          chat.pushed = false;
         }
       };
       eventSource.onerror = (error) => {
@@ -76,18 +80,12 @@ async function sendQuestion() {
           type: "error",
         });
       };
-      chat.pushed = !chat.pushed;
-      sended.value = !sended.value;
     } else {
       ElMessage({
         showClose: true,
         message: `${remainTimesRes.data.message}`,
         type: "error",
       });
-    }
-  } else {
-    if (chat.pushed == false) {
-    } else if (sended.value == true) {
     }
   }
 }
@@ -115,6 +113,7 @@ async function reGetFuncBoard() {
 onMounted(async () => {
   reGetFuncBoard();
 });
+const { temperature } = storeToRefs(chat);
 </script>
 
 <template>
@@ -136,6 +135,17 @@ onMounted(async () => {
         <Suspense><Chat :chatContext="chatContext"></Chat></Suspense>
       </div>
       <div class="chat_question_box">
+        <!-- 温度计 -->
+        <div class="slider-demo-block">
+          <el-slider
+            v-model="temperature"
+            vertical
+            height="40px"
+            :step="0.1"
+            :max="1.8"
+            :min="0.2"
+          />
+        </div>
         <InputComponent
           :height="35"
           :width="60"
@@ -218,5 +228,13 @@ onMounted(async () => {
       margin-bottom: 20px;
     }
   }
+}
+.slider-demo-block {
+  display: flex;
+  align-items: center;
+}
+.slider-demo-block .el-slider {
+  margin-top: 0;
+  margin-left: 12px;
 }
 </style>
