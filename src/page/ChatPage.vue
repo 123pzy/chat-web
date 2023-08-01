@@ -135,17 +135,27 @@ const { temperature } = storeToRefs(chat);
         <Suspense><Chat :chatContext="chatContext"></Chat></Suspense>
       </div>
       <div class="chat_question_box">
-        <!-- 温度计 -->
-        <div class="slider-demo-block">
-          <el-slider
-            v-model="temperature"
-            vertical
-            height="40px"
-            :step="0.1"
-            :max="1.8"
-            :min="0.2"
-          />
-        </div>
+        <!-- 用法提示 -->
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          :content="'值越小回复结果越随机,当前值为：' + temperature"
+          placement="top"
+        >
+          <!-- 温度计 -->
+          <div class="slider-demo-block">
+            <el-slider
+              v-model="temperature"
+              vertical
+              :show-tooltip="false"
+              height="45px"
+              :step="0.1"
+              :max="1.8"
+              :min="0.2"
+            />
+          </div>
+        </el-tooltip>
+
         <InputComponent
           :height="35"
           :width="60"
@@ -225,16 +235,17 @@ const { temperature } = storeToRefs(chat);
       justify-content: center;
       align-items: center;
       border: none;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      .slider-demo-block {
+        display: flex;
+        align-items: center;
+        margin-right: 5px;
+      }
+      .slider-demo-block .el-slider {
+        margin-top: 0;
+        margin-left: 12px;
+      }
     }
   }
-}
-.slider-demo-block {
-  display: flex;
-  align-items: center;
-}
-.slider-demo-block .el-slider {
-  margin-top: 0;
-  margin-left: 12px;
 }
 </style>
