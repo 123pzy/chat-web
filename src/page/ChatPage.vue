@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBoard } from "../stores/funcBoard";
@@ -23,6 +23,7 @@ const chatContext = ref(null);
 // pinia
 const route = useRoute();
 const chat = useChat();
+const { temperature } = storeToRefs(chat);
 const funcBoard = useFuncBoard();
 // router
 const router = useRouter();
@@ -36,58 +37,66 @@ if (!!token) {
 async function sendQuestion() {
   if (chat.toSay()) {
     chat.htmlBefore = "";
-    // chatGPT免费使用次数减一
-    const remainTimesRes = await deleteRemainTimes(username);
-    // 判断是否还有使用次数
-    if (remainTimesRes.data.remainTimes >= 0) {
-      // 发送SSE请求,重点！
-      const tokenObj = { token: token };
-      const res_openAItoken = await haveOwnOpenAItoken(tokenObj);
-      if (res_openAItoken !== "noOpenAI_token") {
-        // 发送请求，传递openAI_token和messageArr
-        let data = {
-          openAI_token: res_openAItoken,
-          temperature: temperature.value,
-          message: chat.messages,
-        };
-        await sendMessageArray(data);
-      } else {
+    const haveToken = localStorage.getItem("haveToken") == "true";
+    if (!haveToken) {
+      // chatGPT免费使用次数减一
+      const remainTimesRes = await deleteRemainTimes(username);
+      console.log("你的剩余次数为", remainTimesRes);
+      // 判断是否还有使用次数
+      if (remainTimesRes.data.remainTimes >= 0) {
+        // 发送SSE请求,重点！
         // 发送请求，只传递messageArr
         let data = { temperature: temperature.value, message: chat.messages };
         await sendMessageArray(data);
-      }
-      const eventSource = chatEventSource();
-      chat.messages.push({
-        role: "assistant",
-        content: "",
-      });
-      eventSource.onmessage = (event) => {
-        if (!event.data.includes("[DONE]")) {
-          chat.htmlBefore += event.data;
-          chat.messages[chat.messages.length - 1].content = marked.parse(
-            chat.htmlBefore
-          );
-        } else if (event.data.includes("[DONE]")) {
-          eventSource.close();
-          chat.pushed = false;
-        }
-      };
-      eventSource.onerror = (error) => {
-        console.error("流式传输发生错误：", error);
+        sendEventSource();
+      } else {
         ElMessage({
           showClose: true,
-          message: "你给的token似乎不太对哦",
+          message: `${remainTimesRes.data.message}`,
           type: "error",
         });
-      };
+      }
     } else {
-      ElMessage({
-        showClose: true,
-        message: `${remainTimesRes.data.message}`,
-        type: "error",
-      });
+      const tokenObj = { token: token };
+      const res_openAItoken = await haveOwnOpenAItoken(tokenObj);
+      // 发送请求，传递openAI_token和messageArr
+      let data = {
+        openAI_token: res_openAItoken,
+        temperature: temperature.value,
+        message: chat.messages,
+      };
+      await sendMessageArray(data);
+      console.log("你使用自己的token，本网站不限次使用!");
+      sendEventSource();
     }
   }
+}
+// 发送eventSource请求
+function sendEventSource() {
+  const eventSource = chatEventSource();
+  chat.messages.push({
+    role: "assistant",
+    content: "",
+  });
+  eventSource.onmessage = (event) => {
+    if (!event.data.includes("[DONE]")) {
+      chat.htmlBefore += event.data;
+      chat.messages[chat.messages.length - 1].content = marked.parse(
+        chat.htmlBefore
+      );
+    } else if (event.data.includes("[DONE]")) {
+      eventSource.close();
+      chat.pushed = false;
+    }
+  };
+  eventSource.onerror = (error) => {
+    console.error("流式传输发生错误：", error);
+    ElMessage({
+      showClose: true,
+      message: "你给的token似乎不太对哦",
+      type: "error",
+    });
+  };
 }
 
 // 点击侧边栏按钮跳转chat界面
@@ -113,7 +122,6 @@ async function reGetFuncBoard() {
 onMounted(async () => {
   reGetFuncBoard();
 });
-const { temperature } = storeToRefs(chat);
 </script>
 
 <template>

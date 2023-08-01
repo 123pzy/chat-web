@@ -48,7 +48,7 @@ const open = async () => {
       }
     )
       .then(async ({ value }) => {
-        // // 发送请求，把用户的个人token传送到服务器
+        // // 发送请求，把用户的个人openAI token存到数据库
         const data = { openAI_token: value, token: token };
         const res = await UseYourToken(data);
         ElMessage({
@@ -79,8 +79,10 @@ async function change() {
   const res_openAIt = await haveOwnOpenAItoken({ token });
   if (res_openAIt !== "noOpenAI_token") {
     haveToken.value = true;
+    localStorage.setItem("haveToken", haveToken.value);
   } else {
     haveToken.value = false;
+    localStorage.setItem("haveToken", haveToken.value);
   }
 }
 change();

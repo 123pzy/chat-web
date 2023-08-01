@@ -81,6 +81,8 @@ const imgUrl2 =
   import.meta.env.MODE === "development"
     ? "/api/profile/" + `${token}`
     : "/profile/" + `${token}`;
+
+const haveToken = localStorage.getItem("haveToken") == "true";
 </script>
 
 <template>
@@ -120,8 +122,8 @@ const imgUrl2 =
       >
       <div>
         剩余使用次数：{{
-          remainTimes > 1000
-            ? "你使用自己的token，本网站不限次使用！"
+          Boolean(haveToken) == true
+            ? "你使用的自己的openAI的token，本网站享用不限次权利！"
             : remainTimes
         }}
       </div>

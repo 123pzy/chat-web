@@ -117,6 +117,7 @@ export function sendMessageArray(data) {
   }
 }
 
+// chat
 export const chatEventSource = () => {
   return new EventSource(`http://45.32.91.22:5001/chat`);
 };
