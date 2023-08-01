@@ -70,7 +70,7 @@ export const useFuncCate = defineStore("funcCate", {
       },
       {
         id: 14,
-        label: "画图",
+        label: "自定义",
         category: 0,
       },
     ],

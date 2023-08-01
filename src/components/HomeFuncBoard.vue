@@ -28,7 +28,8 @@ function handleRouterPush(e, route) {
 // element弹出输入框,用于自定义添加funcBoard板块
 const open = () => {
   ElMessageBox.prompt(
-    "请输入你要chatGPT扮演一个什么样的角色，比如你想让它做你的英语老师，检查你的英文是否包含语法错误，你就可以说:你现在是我的英文老师，检查我发给你的每段英文中是否包含语法错误。关于chatgpt扮演的角色描述的越详细越好~",
+    `请输入你要chatGPT扮演一个什么样的角色，比如你想让它做你的英语老师，检查你的英文是否包含语法错误，你就可以说:你现在是我的英文老师，检查我发给你的每段英文中是否包含语法错误。关于chatgpt扮演的角色描述的越详细越好~ 
+    注意，不要提交不符合社会主义核心价值观的内容！`,
     "自定义chatgpt",
     {
       confirmButtonText: "确认",
@@ -54,7 +55,7 @@ const open = () => {
                     funcBoard.funcBoard[funcBoard.funcBoard.length - 1].id + 1,
                   func: value,
                   icon: "all",
-                  label: "",
+                  label: "自定义",
                   route: `chat_your-maked-${funcBoard.funcBoard.length + 1}`,
                   message: `${message}`,
                 };
