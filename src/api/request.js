@@ -99,7 +99,6 @@ export async function haveOwnOpenAItoken(token) {
 
 // 提前用get请求传递message数组过去
 export function sendMessageArray(data) {
-  console.log("data", data);
   return instance({
     url: `http://45.32.91.22:5001/sendMessage`,
     params: data
