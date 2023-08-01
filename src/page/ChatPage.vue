@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useChat } from "../stores/chat";
-import { useFuncBoard } from "../stores/funcBoard";
-import InputComponent from "../components/InputComponent.vue";
-import ButtonComponent from "../components/ButtonComponent.vue";
-import Chat from "../components/Chat.vue";
-import { ElMessage } from "element-plus";
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useChat } from '../stores/chat';
+import { useFuncBoard } from '../stores/funcBoard';
+import InputComponent from '../components/InputComponent.vue';
+import ButtonComponent from '../components/ButtonComponent.vue';
+import Chat from '../components/Chat.vue';
+import { ElMessage } from 'element-plus';
 import {
   deleteRemainTimes,
   getUsername,
@@ -14,12 +14,12 @@ import {
   haveOwnOpenAItoken,
   sendMessageArray,
   getUsersFuncBoard,
-} from "../api/request";
-import { marked } from "marked";
-import { useStyle } from "../stores/style";
-import { storeToRefs } from "pinia";
+} from '../api/request';
+import { marked } from 'marked';
+import { useStyle } from '../stores/style';
+import { storeToRefs } from 'pinia';
 // 按需引入图标
-import { Switch } from "@element-plus/icons-vue";
+import { Switch } from '@element-plus/icons-vue';
 
 // 获取DOM
 const chatContext = ref(null);
@@ -29,12 +29,12 @@ const chat = useChat();
 const { temperature } = storeToRefs(chat);
 const funcBoard = useFuncBoard();
 const style = useStyle();
-var fontColor = "#fff";
+var fontColor = '#fff';
 var { fontColor } = storeToRefs(style);
 // router
 const router = useRouter();
 // 获取用户名
-const token = localStorage.getItem("token");
+const token = localStorage.getItem('token');
 if (!!token) {
   var username_res = await getUsername({ token });
   var username = username_res.data.username;
@@ -42,8 +42,8 @@ if (!!token) {
 // 定义html
 async function sendQuestion() {
   if (chat.toSay()) {
-    chat.htmlBefore = "";
-    const haveToken = localStorage.getItem("haveToken") == "true";
+    chat.htmlBefore = '';
+    const haveToken = localStorage.getItem('haveToken') == 'true';
     if (!haveToken) {
       // chatGPT免费使用次数减一
       const remainTimesRes = await deleteRemainTimes(username);
@@ -51,15 +51,17 @@ async function sendQuestion() {
       if (remainTimesRes.data.remainTimes >= 0) {
         // 发送SSE请求,重点！
         // 发送请求，只传递messageArr
-        let data = { temperature: temperature.value, message: chat.messages };
+        let data = {
+          temperature: temperature.value,
+          message: JSON.stringify(chat.messages),
+        };
         await sendMessageArray(data);
-        console.log("你的剩余次数为", chat.messages);
         sendEventSource();
       } else {
         ElMessage({
           showClose: true,
           message: `${remainTimesRes.data.message}`,
-          type: "error",
+          type: 'error',
         });
       }
     } else {
@@ -69,10 +71,9 @@ async function sendQuestion() {
       let data = {
         openAI_token: res_openAItoken,
         temperature: temperature.value,
-        message: chat.messages,
+        message: JSON.stringify(chat.messages),
       };
       await sendMessageArray(data);
-      console.log("你使用自己的token，本网站不限次使用!", chat.messages);
       sendEventSource();
     }
   }
@@ -81,27 +82,27 @@ async function sendQuestion() {
 function sendEventSource() {
   const eventSource = chatEventSource();
   chat.messages.push({
-    role: "assistant",
-    content: "",
+    role: 'assistant',
+    content: '',
   });
   eventSource.onmessage = (event) => {
-    if (!event.data.includes("[DONE]")) {
+    if (!event.data.includes('[DONE]')) {
       chat.htmlBefore += event.data;
       marked.setOptions({ mangle: false, headerIds: false }); // 消除警告
       chat.messages[chat.messages.length - 1].content = marked.parse(
         chat.htmlBefore
       );
-    } else if (event.data.includes("[DONE]")) {
+    } else if (event.data.includes('[DONE]')) {
       eventSource.close();
       chat.pushed = false;
     }
   };
   eventSource.onerror = (error) => {
-    console.error("流式传输发生错误：", error);
+    console.error('流式传输发生错误：', error);
     ElMessage({
       showClose: true,
-      message: "你给的token似乎不太对哦",
-      type: "error",
+      message: '你给的token似乎不太对哦',
+      type: 'error',
     });
   };
 }
@@ -120,7 +121,7 @@ async function reGetFuncBoard() {
     return item.route == route.params.route;
   });
   const system_message = {
-    role: "system",
+    role: 'system',
     content: funcBoard.funcBoardCurrent.message,
   };
   chat.messages.push(system_message);
@@ -156,7 +157,7 @@ onMounted(async () => {
         <el-tooltip
           class="box-item"
           effect="dark"
-          :content="'值越小回复结果越随机,当前值为：' + temperature"
+          :content="'值越大回复结果越随意（创造性）,当前值为：' + temperature"
           placement="top"
         >
           <!-- 温度计 -->
@@ -167,7 +168,7 @@ onMounted(async () => {
               :show-tooltip="false"
               height="45px"
               :step="0.1"
-              :max="1.8"
+              :max="1.6"
               :min="0.2"
             />
           </div>
