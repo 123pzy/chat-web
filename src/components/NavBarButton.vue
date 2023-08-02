@@ -49,7 +49,7 @@ const open = async () => {
     )
       .then(async ({ value }) => {
         // // 发送请求，把用户的个人openAI token存到数据库
-        const data = { openAI_token: value, token: token };
+        const data = { openAI_token: String(value), token: token };
         const res = await UseYourToken(data);
         ElMessage({
           type: "success",

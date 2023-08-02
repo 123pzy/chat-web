@@ -13,7 +13,7 @@ const imgUrl =
     ? ` /api/profile/getimg/${token}`
     : `/profile/getimg/${token}`;
 
-let contentBox = ref(null);
+// let contentBox = ref(null);
 const props = defineProps(["chatContext"]);
 // 实现打字回复效果的动态位置调整
 await nextTick();
@@ -33,9 +33,6 @@ watch(
     }
   }
 );
-onBeforeUnmount(() => {
-  contentBox = "";
-});
 </script>
 
 <template>

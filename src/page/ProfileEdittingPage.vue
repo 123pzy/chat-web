@@ -35,7 +35,6 @@ const beforeAvatarUpload = (rawFile) => {
 
 // 输入框内容
 const input_content = ref(null);
-
 // 获取剩余次数
 const result = await getRemainTimes({
   token,
