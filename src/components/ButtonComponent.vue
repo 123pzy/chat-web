@@ -12,7 +12,7 @@ const btnStyle = ref({
 // 监听input框里有没有值，给button添加动画效果
 watch(
   () => chat.say,
-  (newval, oldval) => {
+  (newval) => {
     if (newval != "") {
       btnStyle.value["btn_focus"] = true;
       btnStyle.value["btn_no_focus"] = false;

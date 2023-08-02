@@ -110,7 +110,6 @@ change();
       @click="changeColor"
       v-else
     />
-    <!-- <img src="../assets/icon/bell.svg" alt="" class="icon_bell" /> -->
     <div class="headImage_box">
       <img
         :src="imgUrl"
