@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBoard } from "../stores/funcBoard";
@@ -25,6 +25,7 @@ import { Switch } from "@element-plus/icons-vue";
 // pinia
 const route = useRoute();
 const chat = useChat();
+let eventSource;
 const { temperature } = storeToRefs(chat);
 const funcBoard = useFuncBoard();
 const style = useStyle();
@@ -36,6 +37,7 @@ if (!!token) {
   var username_res = await getUsername({ token });
   var username = username_res.data.username;
 }
+
 // 定义html
 async function sendQuestion() {
   if (chat.toSay()) {
@@ -77,7 +79,7 @@ async function sendQuestion() {
 }
 // 发送eventSource请求
 function sendEventSource() {
-  const eventSource = chatEventSource();
+  eventSource = chatEventSource();
   chat.messages.push({
     role: "assistant",
     content: "",
@@ -106,6 +108,7 @@ function sendEventSource() {
 
 // 点击侧边栏按钮跳转chat界面
 async function handleRouterPush(route) {
+  eventSource.close();
   await router.push(route);
   await reGetFuncBoard();
 }
