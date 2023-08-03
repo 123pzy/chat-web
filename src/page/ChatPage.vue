@@ -108,7 +108,9 @@ function sendEventSource() {
 
 // 点击侧边栏按钮跳转chat界面
 async function handleRouterPush(route) {
-  eventSource.close();
+  if (eventSource) {
+    eventSource.close();
+  }
   await router.push(route);
   await reGetFuncBoard();
 }
