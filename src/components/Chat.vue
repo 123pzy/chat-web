@@ -1,38 +1,56 @@
 <script setup>
-import { ref } from 'vue';
-import { useChat } from '../stores/chat';
-import '/node_modules/github-markdown-css/github-markdown-light.css';
+import { ref, nextTick, watch } from "vue";
+import { useChat } from "../stores/chat";
+import "/node_modules/github-markdown-css/github-markdown-light.css";
 
 const chat = useChat();
 // css样式
-const styleGitHubCss = ref('markdown-body');
-const token = localStorage.getItem('token');
+const styleGitHubCss = ref("markdown-body");
+const token = localStorage.getItem("token");
 // 用户头像链接
 const imgUrl =
-  import.meta.env.MODE === 'development'
+  import.meta.env.MODE === "development"
     ? ` /api/profile/getimg/${token}`
     : `/profile/getimg/${token}`;
 
-// let contentBox = ref(null);
-// const props = defineProps(["chatContext"]);
-// // 实现打字回复效果的动态位置调整
-// await nextTick();
-// let height = ref(0);
-// watch(
-//   () => chat.htmlBefore,
-//   () => {
-//     height.value = 0;
-//     for (var i = 0; i <= contentBox.value.length - 1; i++) {
-//       height.value += contentBox.value[i].offsetHeight;
-//     }
-//     if (height.value >= props.chatContext.offsetHeight) {
-//       props.chatContext.scrollTo({
-//         top: height.value - props.chatContext.offsetHeight + 100,
-//         behavior: "smooth",
-//       });
-//     }
-//   }
-// );
+const props = defineProps(["chatContext"]);
+// 实现打字回复效果的动态位置调整
+await nextTick();
+watch(
+  () => chat.htmlBefore,
+  () => {
+    if (
+      props.chatContext.scrollTop + props.chatContext.clientHeight >=
+      props.chatContext.scrollHeight - 150
+    ) {
+      props.chatContext.scrollTo({
+        top: props.chatContext.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }
+);
+/**
+ * const props = defineProps(["chatContext"]);
+// 实现打字回复效果的动态位置调整
+await nextTick();
+let height = ref(0);
+watch(
+  () => chat.htmlBefore,
+  () => {
+    height.value = 0;
+    for (var i = 0; i <= contentBox.value.length - 1; i++) {
+      height.value += contentBox.value[i].offsetHeight;
+    }
+    if (height.value >= props.chatContext.offsetHeight) {
+      props.chatContext.scrollTo({
+        top: height.value - props.chatContext.offsetHeight + 100,
+        behavior: "smooth",
+      });
+    }
+  }
+);
+ */
 </script>
 
 <template>
@@ -40,7 +58,6 @@ const imgUrl =
     class="chat_container"
     v-for="(msg, index) in chat.messages"
     :key="index"
-    ref="contentBox"
   >
     <div class="answer_container" v-if="msg.role == 'assistant'">
       <img src="../assets/chatPGT.jpg" />
@@ -85,7 +102,7 @@ $contentMarginTop: 25px;
     border-radius: 3px;
   }
   .say_content::after {
-    content: '';
+    content: "";
     // css绘制三角形：
     border-top: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -134,7 +151,7 @@ $contentMarginTop: 25px;
     border-radius: 3px;
   }
   .answer_content::before {
-    content: '';
+    content: "";
     // css绘制三角形：
     border-top: 10px solid transparent;
     border-left: 10px solid transparent;

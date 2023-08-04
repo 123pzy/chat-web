@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useChat } from "../stores/chat";
 import { useFuncBoard } from "../stores/funcBoard";
@@ -21,7 +21,7 @@ import { storeToRefs } from "pinia";
 // 按需引入图标
 import { Switch } from "@element-plus/icons-vue";
 
-// const chatContext = ref(null);
+const chatContext = ref(null);
 // pinia
 const route = useRoute();
 const chat = useChat();
@@ -151,8 +151,8 @@ onMounted(async () => {
       </div>
     </aside>
     <div class="chat_content">
-      <div class="chat_context">
-        <Suspense><Chat></Chat></Suspense>
+      <div class="chat_context" ref="chatContext">
+        <Suspense><Chat :chatContext="chatContext"></Chat></Suspense>
       </div>
       <div class="chat_question_box">
         <!-- 用法提示 -->
