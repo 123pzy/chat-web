@@ -21,36 +21,27 @@ watch(
   () => {
     if (
       props.chatContext.scrollTop + props.chatContext.clientHeight >=
-      props.chatContext.scrollHeight - 150
+      props.chatContext.scrollHeight - 100
     ) {
       props.chatContext.scrollTo({
         top: props.chatContext.scrollHeight,
         behavior: "smooth",
       });
     }
+  },
+  {
+    immediate: true,
   }
 );
-/**
- * const props = defineProps(["chatContext"]);
-// 实现打字回复效果的动态位置调整
-await nextTick();
-let height = ref(0);
 watch(
-  () => chat.htmlBefore,
+  () => chat.messages.length,
   () => {
-    height.value = 0;
-    for (var i = 0; i <= contentBox.value.length - 1; i++) {
-      height.value += contentBox.value[i].offsetHeight;
-    }
-    if (height.value >= props.chatContext.offsetHeight) {
-      props.chatContext.scrollTo({
-        top: height.value - props.chatContext.offsetHeight + 100,
-        behavior: "smooth",
-      });
-    }
+    props.chatContext.scrollTo({
+      top: props.chatContext.scrollHeight,
+      behavior: "smooth",
+    });
   }
 );
- */
 </script>
 
 <template>
