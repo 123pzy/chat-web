@@ -1,19 +1,18 @@
 <script setup>
-import { ref, nextTick, watch } from "vue";
-import { useChat } from "../stores/chat";
-import "/node_modules/github-markdown-css/github-markdown-light.css";
+import { ref, nextTick, watch, onMounted } from 'vue';
+import { useChat } from '../stores/chat';
 
 const chat = useChat();
 // css样式
-const styleGitHubCss = ref("markdown-body");
-const token = localStorage.getItem("token");
+const styleGitHubCss = ref('markdown-body');
+const token = localStorage.getItem('token');
 // 用户头像链接
 const imgUrl =
-  import.meta.env.MODE === "development"
+  import.meta.env.MODE === 'development'
     ? ` /api/profile/getimg/${token}`
     : `/profile/getimg/${token}`;
 
-const props = defineProps(["chatContext"]);
+const props = defineProps(['chatContext']);
 // 实现打字回复效果的动态位置调整
 await nextTick();
 watch(
@@ -25,7 +24,7 @@ watch(
     ) {
       props.chatContext.scrollTo({
         top: props.chatContext.scrollHeight,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   },
@@ -38,10 +37,18 @@ watch(
   () => {
     props.chatContext.scrollTo({
       top: props.chatContext.scrollHeight,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }
 );
+// onMounted(() => {
+//   const link = document.createElement('link');
+//   link.type = 'text/css';
+//   link.rel = 'stylesheet';
+//   link.href =
+//     'https://cdn.bootcss.com/github-markdown-css/2.10.0/github-markdown.min.css';
+//   document.head.appendChild(link);
+// });
 </script>
 
 <template>
@@ -93,7 +100,7 @@ $contentMarginTop: 25px;
     border-radius: 3px;
   }
   .say_content::after {
-    content: "";
+    content: '';
     // css绘制三角形：
     border-top: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -101,7 +108,7 @@ $contentMarginTop: 25px;
     border-left: 10px solid #dfe4ea;
     position: relative;
     // 控制伪元素的位置：
-    left: 20px;
+    left: 19px;
     top: 0px;
   }
   img {
@@ -142,7 +149,7 @@ $contentMarginTop: 25px;
     border-radius: 3px;
   }
   .answer_content::before {
-    content: "";
+    content: '';
     // css绘制三角形：
     border-top: 10px solid transparent;
     border-left: 10px solid transparent;
