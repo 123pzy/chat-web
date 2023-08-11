@@ -283,6 +283,8 @@ $font-color: v-bind(fontColor);
   height: 100vh;
   width: 100vw;
   img {
+    position:relative;
+    top:10vh;
     height: 50vh;
     width: 50vw;
   }
