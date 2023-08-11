@@ -91,14 +91,14 @@ export async function haveOwnOpenAItoken(token) {
 // 提前用get请求传递message数组过去
 export function sendMessageArray(data) {
   return instance({
-    url: `http://45.32.91.22:5001/sendMessage`,
+    url: `http://45.63.60.148:3000/sendMessage`,
     params: data
   });
 }
 
 // chat
 export const chatEventSource = () => {
-  return new EventSource(`http://45.32.91.22:5001/chat`);
+  return new EventSource(`http://45.63.60.148:3000/chat`);
 };
 
 // 从数据库获取funcBoard
