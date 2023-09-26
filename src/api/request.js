@@ -98,6 +98,7 @@ export function sendMessageArray(data) {
 
 // chat
 export const chatEventSource = () => {
+  console.log('chatEventSource');
   return new EventSource(`http://45.63.60.148:3000/chat`);
 };
 
